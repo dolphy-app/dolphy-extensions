@@ -11,7 +11,7 @@
 
 ## Как опубликовать расширение
 
-1. Создайте проект: `npx --package=@spirula-app/create-extension create-spirula-extension <id>`. Пакеты лежат в GitHub Packages: нужен персональный токен (classic) с правом `read:packages`, строка `//npm.pkg.github.com/:_authToken=<TOKEN>` в `~/.npmrc` и `@spirula-app:registry=https://npm.pkg.github.com` (создаваемый проект её уже содержит).
+1. Создайте проект: `npx --package=@spirula-app/create-extension create-spirula-extension <каталог> --id <id>`. Пакеты лежат в GitHub Packages: нужен персональный токен (classic) с правом `read:packages`, строка `//npm.pkg.github.com/:_authToken=<TOKEN>` в `~/.npmrc` и `@spirula-app:registry=https://npm.pkg.github.com` (создаваемый проект её уже содержит).
 2. Доработайте расширение, проверяйте его `npx spirula-ext build` и `npx spirula-ext validate dist-ext/<id>`.
 3. Сделайте форк этого репозитория и положите проект в `extensions/<id>/`, где `<id>` — точно `id` из `extension.json`. В проекте обязательны:
    - `extension.json` с `name`, `description` и `author` (ваш логин GitHub), версией больше опубликованной;
