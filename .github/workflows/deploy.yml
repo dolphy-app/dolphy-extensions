@@ -36,8 +36,10 @@ jobs:
         id: detect
         run: |
           before="${{ github.event.before }}"
+          # первая публикация ветки: сравниваем с пустым деревом, иначе
+          # единственный коммит сравнился бы сам с собой и diff был бы пустым
           if [ "$before" = '0000000000000000000000000000000000000000' ]; then
-            before=$(git rev-list --max-parents=0 HEAD)
+            before=$(git hash-object -t tree /dev/null)
           fi
           scripts/changed-extensions.sh "$before...HEAD" >> "$GITHUB_OUTPUT"
 
