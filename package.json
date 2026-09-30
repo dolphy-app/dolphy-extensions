@@ -1,0 +1,11 @@
+{
+  "name": "spirula-extensions",
+  "private": true,
+  "description": "Каталог расширений Spirula: инструменты проверки и сборки для CI",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "devDependencies": {
+    "@spirula-app/extension-tools": "^0.1.0"
+  }
+}
