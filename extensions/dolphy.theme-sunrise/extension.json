@@ -1,5 +1,5 @@
 {
-  "id": "spirula.theme-sunrise",
+  "id": "dolphy.theme-sunrise",
   "version": "1.0.0",
   "apiVersion": 1,
   "name": "Рассвет",
@@ -8,7 +8,7 @@
   "contributes": {
     "themes": [
       {
-        "id": "spirula.theme-sunrise",
+        "id": "dolphy.theme-sunrise",
         "label": "Рассвет",
         "dark": false,
         "colors": {

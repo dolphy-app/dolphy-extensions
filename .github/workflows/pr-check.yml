@@ -10,7 +10,6 @@ on:
 
 permissions:
   contents: read
-  packages: read
 
 concurrency:
   group: pr-check-${{ github.event.pull_request.number }}
@@ -57,14 +56,10 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          registry-url: https://npm.pkg.github.com
-          scope: '@spirula-app'
 
-      # инструменты каталога (spirula-ext) из GitHub Packages
+      # инструменты каталога (dolphy-ext)
       - name: Install tools
         run: npm install --ignore-scripts --no-audit --no-fund
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fetch published index
         run: |
@@ -79,11 +74,11 @@ jobs:
         run: |
           args=(--ids "${{ matrix.extension }}")
           [ -f published.json ] && args+=(--published-index published.json)
-          npx spirula-ext catalog check extensions "${args[@]}"
+          npx dolphy-ext catalog check extensions "${args[@]}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # зависимости проекта расширения: без скриптов пакетов, без секретов кроме чтения пакетов
+      # зависимости проекта расширения: без скриптов пакетов
       - name: Install extension dependencies
         working-directory: extensions/${{ matrix.extension }}
         run: |
@@ -92,11 +87,9 @@ jobs:
           else
             echo 'no dependencies'
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
-        run: npx spirula-ext catalog build --src extensions --ids "${{ matrix.extension }}" --out site
+        run: npx dolphy-ext catalog build --src extensions --ids "${{ matrix.extension }}" --out site
 
       - name: Upload build
         uses: actions/upload-artifact@v4
@@ -120,17 +113,13 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          registry-url: https://npm.pkg.github.com
-          scope: '@spirula-app'
 
       - name: Install tools
         run: npm install --ignore-scripts --no-audit --no-fund
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # пробная пересборка индекса с новым списком отзыва: неверный диапазон версии даст ошибку
       - name: Reindex (dry)
         run: |
           mkdir site
           curl -fsSL "$INDEX_URL" -o site/index.json
-          npx spirula-ext catalog build --reindex --out site --revoked revoked.json
+          npx dolphy-ext catalog build --reindex --out site --revoked revoked.json
