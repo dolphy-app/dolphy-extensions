@@ -1,9 +1,9 @@
-# Рассвет
+# Sunrise
 
-Тёплая светлая тема для Spirula: бежевый фон, белые карточки и янтарный акцент.
+A warm light theme for Spirula: beige background, white cards and an amber accent.
 
-- Вклад: тема `spirula.theme-sunrise` («Настройки → Внешний вид»).
-- Кода нет: расширение состоит из одного `extension.json`, поэтому ему не нужны разрешения.
-- Контраст основных пар «текст — фон» не ниже 4,5:1 (акцент `#B45309` на белом — 5,0:1).
+- Contribution: the theme `spirula.theme-sunrise` (“Settings → Appearance”; listed there as “Рассвет”).
+- No code: the extension consists of a single `extension.json`, so it needs no permissions.
+- Contrast of the main text/background pairs is at least 4.5:1 (the `#B45309` accent on white is 5.0:1).
 
-Это образец расширения без кода: чтобы сделать свою тему, скопируйте каталог, смените `id`, `version`, `name`, `author` и цвета, затем откройте pull request (см. корневой `README.md`).
+This is a sample extension without code: to make your own theme, copy the directory, change `id`, `version`, `name`, `author` and the colors, then open a pull request (see the root `README.md`).

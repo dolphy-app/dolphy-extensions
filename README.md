@@ -1,44 +1,44 @@
-# Каталог расширений Spirula
+# Spirula extension catalog
 
-Здесь лежат исходники расширений, которые можно поставить из приложения Spirula («Настройки → Расширения → Каталог»). Расширение попадает в каталог pull request'ом, проходит автоматические проверки и ревью, а после слияния CI собирает его и публикует.
+This repository holds the sources of the extensions that can be installed from the Spirula app (“Settings → Extensions → Catalog”). An extension enters the catalog through a pull request, passes automated checks and review, and after the merge CI builds and publishes it.
 
-- Что такое расширение и как его написать: [docs/design/extensions.md](https://github.com/spirula-app/spirula/blob/develop/docs/design/extensions.md) в основном репозитории.
-- Правила ревью: [skills/extension-reviewer/SKILL.md](skills/extension-reviewer/SKILL.md) и [rules/rules.json](rules/rules.json).
+- What an extension is and how to write one: [docs/design/extensions.md](https://github.com/spirula-app/spirula/blob/develop/docs/design/extensions.md) in the main repository.
+- Review rules: [skills/extension-reviewer/SKILL.md](skills/extension-reviewer/SKILL.md) and [rules/rules.json](rules/rules.json).
 
-## Как установить расширение
+## How to install an extension
 
-Откройте в приложении «Настройки → Расширения → Каталог», найдите расширение и нажмите «Установить». Перед установкой приложение показывает разрешения, которые просит расширение. Расширения из каталога работают в изоляции; о её пределах — в ADR 0003 основного репозитория.
+In the app, open “Settings → Extensions → Catalog”, find the extension and click “Install”. Before installing, the app shows the permissions the extension requests. Extensions from the catalog run in isolation; its limits are described in ADR 0003 of the main repository.
 
-## Как опубликовать расширение
+## How to publish an extension
 
-1. Создайте проект: `npx --package=@spirula-app/create-extension create-spirula-extension <каталог> --id <id>`. Пакеты лежат в GitHub Packages: нужен персональный токен (classic) с правом `read:packages`, строка `//npm.pkg.github.com/:_authToken=<TOKEN>` в `~/.npmrc` и `@spirula-app:registry=https://npm.pkg.github.com` (создаваемый проект её уже содержит).
-2. Доработайте расширение, проверяйте его `npx spirula-ext build` и `npx spirula-ext validate dist-ext/<id>`.
-3. Сделайте форк этого репозитория и положите проект в `extensions/<id>/`, где `<id>` — точно `id` из `extension.json`. В проекте обязательны:
-   - `extension.json` с `name`, `description` и `author` (ваш логин GitHub), версией больше опубликованной;
-   - `README.md` — что делает расширение и зачем нужны его разрешения;
-   - `package.json` и lockfile (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` или `bun.lock`), зависимости только из реестра, без скриптов `postinstall`, `prepare` и подобных.
-4. Проверьте локально: `npx spirula-ext catalog check extensions --ids <id> --skip-github-check`. Список правил: `npx spirula-ext catalog check --list-rules`.
-5. Откройте pull request. CI запустит проверку и пробную сборку. Мейнтейнер проведёт смысловое ревью по правилам из `rules/rules.json`.
-6. После слияния в `main` CI соберёт расширение и добавит его версию в каталог.
+1. Create a project: `npx --package=@spirula-app/create-extension create-spirula-extension <directory> --id <id>`. The packages live in GitHub Packages: you need a personal access token (classic) with the `read:packages` scope, the line `//npm.pkg.github.com/:_authToken=<TOKEN>` in `~/.npmrc`, and `@spirula-app:registry=https://npm.pkg.github.com` (the generated project already contains it).
+2. Finish the extension and check it with `npx spirula-ext build` and `npx spirula-ext validate dist-ext/<id>`.
+3. Fork this repository and put the project in `extensions/<id>/`, where `<id>` is exactly the `id` from `extension.json`. The project must contain:
+   - `extension.json` with `name`, `description` and `author` (your GitHub login), and a version greater than the published one;
+   - `README.md` — what the extension does and why it needs its permissions;
+   - `package.json` and a lockfile (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` or `bun.lock`); dependencies only from the registry, no `postinstall`, `prepare` or similar scripts.
+4. Check locally: `npx spirula-ext catalog check extensions --ids <id> --skip-github-check`. List the rules with `npx spirula-ext catalog check --list-rules`.
+5. Open a pull request. CI runs the checks and a trial build. A maintainer performs a semantic review against the rules in `rules/rules.json`.
+6. After the merge into `main`, CI builds the extension and adds its version to the catalog.
 
-Опубликованные версии не меняются. Чтобы выпустить исправление, поднимите `version` и откройте новый pull request.
+Published versions never change. To ship a fix, bump `version` and open a new pull request.
 
-## Как устроен каталог
+## How the catalog works
 
-| Что | Где |
+| What | Where |
 | --- | --- |
-| Исходники расширений | `extensions/<id>/` (ветка `main`) |
-| Опубликованные файлы и индекс | ветка `gh-pages`: `index.json` и `extensions/<id>/<версия>/…` |
-| Отзыв версий | `revoked.json` (список `{ id, versions, reason }`) |
-| Проверки PR | `.github/workflows/pr-check.yml` |
-| Публикация | `.github/workflows/deploy.yml` |
+| Extension sources | `extensions/<id>/` (`main` branch) |
+| Published files and index | `gh-pages` branch: `index.json` and `extensions/<id>/<version>/…` |
+| Version revocation | `revoked.json` (a list of `{ id, versions, reason }`) |
+| PR checks | `.github/workflows/pr-check.yml` |
+| Publishing | `.github/workflows/deploy.yml` |
 
-Приложение читает `index.json` и скачивает файлы версии по относительному `baseUrl`, проверяя размер и sha256 каждого файла. Индекс хранит не более пяти последних версий расширения; старые каталоги остаются в `gh-pages`.
+The app reads `index.json` and downloads a version's files by relative `baseUrl`, verifying the size and sha256 of every file. The index keeps at most the five latest versions of an extension; older directories stay in `gh-pages`.
 
-## Для мейнтейнеров
+## For maintainers
 
-- **Отзыв версии.** Добавьте запись в `revoked.json`, например `{ "id": "acme.tool", "versions": "<1.2.0", "reason": "..." }`. Допустимы диапазоны `<`, `<=`, `>`, `>=`, `=` и их пробельные сочетания. После слияния CI пересоберёт индекс; приложения отключат установленные отозванные версии при следующей проверке.
-- **Доступ CI к пакетам.** Инструменты (`@spirula-app/extension-tools`) ставятся из GitHub Packages с `GITHUB_TOKEN`. Пакету нужно выдать доступ этому репозиторию: Package settings → Manage Actions access → добавить `spirula-extensions` с правом Read.
-- **GitHub Pages.** Источник — ветка `gh-pages`, корень. Бесплатный план GitHub отдаёт Pages только из публичных репозиториев, поэтому репозиторий должен быть публичным до первой публикации.
-- **Защита веток.** Включите защиту `main` (обязательные проверки `PR check`, merge только через pull request) там, где тариф это позволяет.
-- **Индекс, который читает приложение:** `https://spirula-app.github.io/spirula-extensions/index.json`.
+- **Revoking a version.** Add an entry to `revoked.json`, for example `{ "id": "acme.tool", "versions": "<1.2.0", "reason": "..." }`. Ranges `<`, `<=`, `>`, `>=`, `=` and their space-separated combinations are allowed. After the merge CI rebuilds the index; apps disable installed revoked versions on their next check.
+- **CI access to packages.** The tools (`@spirula-app/extension-tools`) are installed from GitHub Packages with `GITHUB_TOKEN`. Grant this repository access to the package: Package settings → Manage Actions access → add `spirula-extensions` with the Read role.
+- **GitHub Pages.** The source is the `gh-pages` branch, root directory. The free GitHub plan serves Pages only from public repositories, so the repository must be public before the first publication.
+- **Branch protection.** Enable protection for `main` (required `PR check` status, merge only through a pull request) wherever your plan allows it.
+- **The index the app reads:** `https://spirula-app.github.io/spirula-extensions/index.json`.
