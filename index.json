@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-30T22:43:06.364Z",
+  "extensions": [
+    {
+      "id": "dolphy.theme-sunrise",
+      "name": "Рассвет",
+      "description": "Тёплая светлая тема с янтарным акцентом и мягкими бежевыми поверхностями",
+      "author": "Tinkerbells",
+      "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/dolphy.theme-sunrise",
+      "platforms": [],
+      "contributes": {
+        "exerciseTypes": [],
+        "themes": [
+          "dolphy.theme-sunrise"
+        ],
+        "markdownRenderers": [],
+        "gradePolicies": []
+      },
+      "versions": [
+        {
+          "version": "1.0.0",
+          "apiVersion": 1,
+          "minAppVersion": null,
+          "permissions": [],
+          "publishedAt": "2026-09-30T22:43:06.364Z",
+          "baseUrl": "extensions/dolphy.theme-sunrise/1.0.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 607,
+              "sha256": "dc115bf7e37bfaa99ab3a0a9755608890cdb0215ca11dc8e8a16afadc5810387"
+            },
+            {
+              "path": "extension.json",
+              "size": 1138,
+              "sha256": "03a81360f122e67ba23fe1987e61fa7107f9832254ed7819dff3749bc23133dc"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "revoked": []
+}
