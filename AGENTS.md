@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Rules for agents and contributors of the Spirula extension catalog.
+Rules for agents and contributors of the Dolphy extension catalog.
 
 ## Language
 

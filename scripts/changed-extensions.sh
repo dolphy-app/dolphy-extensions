@@ -11,7 +11,7 @@ ids=$(printf '%s\n' "$changed" \
   | sed -n 's#^extensions/\([^/][^/]*\)/.*#\1#p' \
   | sort -u \
   | while read -r id; do
-      [ -d "extensions/$id" ] && printf '%s\n' "$id"
+      if [ -d "extensions/$id" ]; then printf '%s\n' "$id"; fi
     done)
 
 json=$(printf '%s\n' "$ids" | jq -R -s -c 'split("\n") | map(select(length > 0))')
