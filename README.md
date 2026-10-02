@@ -23,6 +23,20 @@ In the app, open “Settings → Extensions → Catalog”, find the extension a
 
 Published versions never change. To ship a fix, bump `version` and open a new pull request.
 
+## Theme icons
+
+An extension can have an icon (`"icon": "assets/icon.png"` in `extension.json`); the app shows it in the catalog, the install dialog and the list of installed extensions. For a theme the icon is a miniature of the app drawn from the theme's own colors: a backdrop in `background`, a `surface` card, a `primary` button, a `secondary` accent dot and text lines in `on-surface` / `on-surface-variant`.
+
+Generate it with the script of this repository (plain Node 22.12 or newer, no dependencies):
+
+```sh
+node scripts/theme-icon.mjs extensions/<id> [extensions/<id> ...]
+```
+
+- It reads the first theme of `contributes.themes` in `extensions/<id>/extension.json` and writes `extensions/<id>/assets/icon.png`: 128×128, an opaque rounded square with transparent corners, well under the 16 KiB limit. The same colors always produce the same bytes.
+- It does not edit the manifest: add `"icon": "assets/icon.png"` yourself. Published versions never change, so adding or changing an icon needs a new `version`.
+- Run it again after changing a theme's colors.
+
 ## How the catalog works
 
 | What | Where |
