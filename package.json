@@ -6,6 +6,6 @@
     "node": ">=22.12"
   },
   "devDependencies": {
-    "@dolphy-app/extension-tools": "^0.2.0"
+    "@dolphy-app/extension-tools": "^0.3.0"
   }
 }
