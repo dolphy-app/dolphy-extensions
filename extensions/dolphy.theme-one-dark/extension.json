@@ -1,0 +1,48 @@
+{
+  "id": "dolphy.theme-one-dark",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "name": "One Dark",
+  "description": "Тёмная тема One Dark из редактора Atom: сине-серая основа и синий акцент",
+  "author": "Tinkerbells",
+  "icon": "assets/icon.png",
+  "contributes": {
+    "themes": [
+      {
+        "id": "dolphy.theme-one-dark",
+        "label": "One Dark",
+        "dark": true,
+        "colors": {
+          "background": "#21252B",
+          "surface": "#282C34",
+          "surface-bright": "#3A3F4B",
+          "surface-light": "#353B45",
+          "surface-variant": "#353B45",
+          "on-background": "#D7DAE0",
+          "on-surface": "#D7DAE0",
+          "on-surface-variant": "#ABB2BF",
+          "primary": "#61AFEF",
+          "on-primary": "#21252B",
+          "secondary": "#C678DD",
+          "on-secondary": "#21252B",
+          "error": "#E06C75",
+          "on-error": "#21252B",
+          "warning": "#E5C07B",
+          "on-warning": "#21252B",
+          "success": "#98C379",
+          "on-success": "#21252B",
+          "info": "#56B6C2",
+          "on-info": "#21252B",
+          "hero-start": "#61AFEF",
+          "hero-end": "#C678DD",
+          "hero-contrast": "#21252B"
+        },
+        "variables": {
+          "border-color": "#ABB2BF",
+          "border-opacity": 0.2,
+          "medium-emphasis-opacity": 0.78
+        }
+      }
+    ]
+  }
+}
