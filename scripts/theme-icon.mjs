@@ -5,7 +5,7 @@
 // Usage: node scripts/theme-icon.mjs extensions/<id> [extensions/<id> ...]
 //
 // No dependencies (Node >= 22.12). The output is deterministic: the same
-// manifest colors give the same bytes.
+// theme colors in src/theme.json give the same bytes.
 import { crc32, deflateSync } from 'node:zlib';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -222,22 +222,17 @@ const encodePng = (rgba, width, height) => {
 };
 
 const writeIcon = (dir) => {
-  const manifest = JSON.parse(readFileSync(join(dir, 'extension.json'), 'utf8'));
-  const themes = manifest.contributes?.themes;
-  if (!Array.isArray(themes) || themes.length === 0) {
-    throw new Error(`${dir}: extension.json has no contributes.themes`);
+  const theme = JSON.parse(readFileSync(join(dir, 'src', 'theme.json'), 'utf8'));
+  if (typeof theme.colors !== 'object' || theme.colors === null) {
+    throw new Error(`${dir}: src/theme.json has no colors`);
   }
-  const png = encodePng(
-    renderRgba(paletteOf(themes[0])),
-    SIZE,
-    SIZE,
-  );
+  const png = encodePng(renderRgba(paletteOf(theme)), SIZE, SIZE);
   if (png.length > MAX_BYTES) {
     throw new Error(`${dir}: icon is ${png.length} bytes, the limit is ${MAX_BYTES}`);
   }
   mkdirSync(join(dir, 'assets'), { recursive: true });
   writeFileSync(join(dir, 'assets', 'icon.png'), png);
-  console.log(`${dir}/assets/icon.png  ${png.length} bytes  (${themes[0].label})`);
+  console.log(`${dir}/assets/icon.png  ${png.length} bytes  (${theme.label})`);
 };
 
 const dirs = process.argv.slice(2);

@@ -3,139 +3,150 @@
   "rules": [
     {
       "id": "MANIFEST-001",
-      "title": "Манифест не соответствует поведению расширения",
+      "title": "The manifest does not match what the extension does",
       "defaultSeverity": "warning",
       "guidance": [
-        "Сверьте `name`, `description`, вклады (`contributes`) и `permissions` с реализацией: описание должно честно говорить, что расширение делает.",
-        "`blocking` — очевидное фактическое расхождение или вводящее в заблуждение название вида задания, темы или правила оценки. `suggestion` — правка формулировок.",
-        "Не сообщайте о том, что проверяет CI: схема манифеста, обязательные поля, совпадение `id` с каталогом, версия."
+        "Compare `name`, `description` and `tags` of `extension.json`, and the titles and descriptions the code registers (exercise types, themes, grade policies, commands, panels, settings), with the implementation: the description must say honestly what the extension does.",
+        "`blocking` — an obvious factual mismatch, or a misleading name of an exercise type, theme or grade policy. `suggestion` — wording fixes.",
+        "Do not report what CI checks: the manifest schema, required fields, `id` matching the directory, the version."
       ]
     },
     {
-      "id": "PERMISSIONS-001",
-      "title": "Объявленные разрешения не соответствуют коду",
+      "id": "TRUST-001",
+      "title": "Access beyond the stated purpose",
       "defaultSeverity": "blocking",
       "guidance": [
-        "`process.spawn`, `worker.threads`, `native.addons`, `library.read` должны быть объявлены тогда и только тогда, когда код действительно запускает процессы, создаёт потоки, загружает нативные модули или читает библиотеку курсов.",
-        "Лишнее разрешение без причины — `warning`; код, которому разрешение нужно, но не объявлено, — `blocking` (в изоляции он всё равно не заработает).",
-        "`network` только информирует, платформа его не ограничивает: требуйте объявления, если код обращается к сети, и проверяйте правило NETWORK-001."
+        "Extensions run without restrictions, with the rights of the app: the code can reach files, processes, threads, the network and learning data. The review is the only barrier, so report any access to files, processes, the network or learning data (answers, the attempt log, settings, the course library) that the description does not state and the stated purpose does not need.",
+        "Do not report access that follows plainly from the stated purpose (an importer reads the file the user picked, an exporter writes where the user chose).",
+        "`blocking` when the access is hidden or unrelated to the description; `warning` when it is related but broader than needed (for example, reading the whole library to find one course)."
+      ]
+    },
+    {
+      "id": "ENGINE-001",
+      "title": "Engine writes and learning-cycle hooks do not match the description",
+      "defaultSeverity": "blocking",
+      "guidance": [
+        "Writes to the attempt log, the settings or the plan through `s.engine` (server) or `useEngine()` / `client.engine` (window), and `server.before` hooks (`session.start`, `practice.batch`), must do what the description says. The engine adds no checks beyond argument validation, so what the extension writes lands in the log that is synced between devices.",
+        "`blocking`: forging attempts or grades, recording attempts the user did not make, rewriting or deleting the log, changing settings the user did not ask to change, and silently changing the content of a session (adding, removing or reordering exercises) in a way the description does not state.",
+        "`warning`: a write that matches the description but has no visible confirmation or no way to undo it; a hook that cancels an operation (throws) where it could pass the request through."
+      ]
+    },
+    {
+      "id": "INJECTION-001",
+      "title": "Injection into the app window hides or imitates the interface",
+      "defaultSeverity": "warning",
+      "guidance": [
+        "An injection (`addInjection`) places a component next to an element of the window found by a CSS selector. It must not hide, cover or replace parts of the app interface, and must not imitate the interface of the app (fake buttons, dialogs, banners or messages about the app) so that the user takes the extension's content for the app's.",
+        "`blocking` for hiding or replacing app controls or imitating app dialogs and messages; `warning` for covering content or breaking the layout.",
+        "`suggestion` for a fragile target: a class, a `data-testid` or a markup structure depends on the layout of the app and may stop matching. Prefer an anchor (`data-ext-anchor`, the selector from `anchorSelector(id)`)."
       ]
     },
     {
       "id": "DEPENDENCY-001",
-      "title": "Выбор зависимостей не соответствует реализации",
+      "title": "The choice of dependencies does not match the implementation",
       "defaultSeverity": "warning",
       "guidance": [
-        "Отмечайте неиспользуемые, неожиданно мощные (запуск процессов, доступ к сети или файловой системе без причины) и необоснованно избыточные зависимости.",
-        "Зависимости должны быть из реестра: `git:`, tarball по URL, `file:` и `link:` запрещены (проверяет CI)."
+        "Report unused, unexpectedly powerful (process spawning, network or file system access without a reason) and needlessly heavy dependencies.",
+        "Dependencies must come from the registry: `git:`, tarballs by URL, `file:` and `link:` are forbidden (CI checks this)."
       ]
     },
     {
       "id": "SECURITY-001",
-      "title": "Небезопасный скачиваемый исполняемый файл",
+      "title": "Unsafe downloaded executable",
       "defaultSeverity": "blocking",
       "guidance": [
-        "Запретите скачивание и запуск произвольных бинарников во время работы расширения.",
-        "Допустим оправданный ресурс из известного независимого источника; предпочтительнее просить пользователя установить нужный инструмент самому."
+        "Forbid downloading and running arbitrary binaries while the extension works.",
+        "A justified resource from a well-known independent source is acceptable; it is better to ask the user to install the needed tool themselves."
       ]
     },
     {
       "id": "SECURITY-002",
-      "title": "Внедрение команд или кода",
+      "title": "Command or code injection",
       "defaultSeverity": "blocking",
       "guidance": [
-        "`blocking` только если реально неподконтрольное или неожиданное значение может изменить синтаксис выполняемой команды или кода и вызвать действие, которого пользователь не хотел.",
-        "Проверяйте `eval`, `Function`, динамический `import` удалённого кода, сборку shell-строк и декодирование исполняемых строк только при наличии правдоподобного пути выполнения.",
-        "Параметризованные аргументы процессов не считаются нарушением из-за одной динамичности данных."
+        "`blocking` only if an uncontrolled or unexpected value can really change the syntax of an executed command or code and trigger an action the user did not intend.",
+        "Check `eval`, `Function`, dynamic `import` of remote code, building shell strings and decoding executable strings only where a plausible execution path exists.",
+        "Parameterized process arguments are not a violation merely because the data is dynamic."
       ]
     },
     {
       "id": "SECURITY-003",
-      "title": "Утечка учётных данных или чувствительных данных",
+      "title": "Leak of credentials or sensitive data",
       "defaultSeverity": "blocking",
       "guidance": [
-        "Ищите секреты в исходниках, в логах, отправку несвязанным сервисам, передачу командам, которым они не нужны.",
-        "Расширение не должно читать ответы учеников, журнал и настройки приложения сверх того, что нужно его заявленной задаче."
-      ]
-    },
-    {
-      "id": "ISOLATION-001",
-      "title": "Попытка обойти изоляцию",
-      "defaultSeverity": "blocking",
-      "guidance": [
-        "Код и интерфейс недоверенного расширения работают в изоляции (ограниченный процесс и изолированная рамка). Отмечайте попытки выйти за её пределы: доступ к `window.parent`, `window.top`, `postMessage` за пределами протокола рамки, загрузку скриптов других расширений, подмену `process.env`/`process.permission`, обход ограничений файловой системы через символические ссылки.",
-        "Обычная работа внутри выданных возможностей нарушением не является."
+        "Look for secrets in the sources and in logs, sending to unrelated services, and passing to commands that do not need them.",
+        "An extension must not read the learners' answers, the attempt log and the app settings beyond what its stated purpose needs."
       ]
     },
     {
       "id": "PROCESS-001",
-      "title": "Небезопасный или необоснованный запуск процессов",
+      "title": "Unsafe or unjustified process spawning",
       "defaultSeverity": "warning",
       "guidance": [
-        "Назовите запускаемые программы и проверьте, что их назначение соответствует расширению.",
-        "Отмечайте небезопасный запуск и дочерние процессы, которые переживают приложение; документированные системные инструменты допустимы."
+        "Name the programs that are started and check that their purpose matches the extension.",
+        "Report unsafe spawning and child processes that outlive the app; documented system tools are acceptable."
       ]
     },
     {
       "id": "NETWORK-001",
-      "title": "Подозрительное или вводящее в заблуждение использование сети",
+      "title": "Suspicious or misleading use of the network",
       "defaultSeverity": "blocking",
       "guidance": [
-        "Не сообщайте об обычных запросах к API, которые разумно следуют из назначения расширения.",
-        "Отмечайте несвязанные адреса, скрытую отправку данных, неразглашённую аналитику и слежение, утечку учётных или персональных данных."
+        "Do not report ordinary API requests that follow reasonably from the purpose of the extension.",
+        "Report unrelated addresses, hidden sending of data, undisclosed analytics and tracking, and leaks of credentials or personal data."
       ]
     },
     {
       "id": "UX-001",
-      "title": "Нет понятного сообщения об ошибке",
+      "title": "No clear error message",
       "defaultSeverity": "warning",
       "guidance": [
-        "Для элементов ввода ответа и рендереров содержимого требуется видимое сообщение при сбое и рабочий режим без ввода; не молчать и не ломать страницу.",
-        "Не требуйте обработки, которую платформа уже показывает пользователю сама (например, сообщение «не удалось отобразить блок»)."
+        "Answer views, panels and content renderers must show a visible message when something fails and keep a working state without input; they must not stay silent or break the page.",
+        "Do not require handling that the platform already shows to the user itself (for example, the card with a message and “Retry” that replaces a component that crashed, or the note in place of a markdown block that failed to render)."
       ]
     },
     {
       "id": "UX-002",
-      "title": "Элемент ввода недоступен с клавиатуры или скринридером",
+      "title": "The answer view or a panel is not usable with a keyboard or a screen reader",
       "defaultSeverity": "warning",
       "guidance": [
-        "Элемент ответа должен управляться клавиатурой, иметь видимый фокус и доступное имя; состояние не должно передаваться только цветом.",
-        "`blocking`, если ввод ответа невозможен без мыши."
+        "The component of an answer view must be operable with the keyboard, show a visible focus and have an accessible name; a state must not be conveyed by color alone. The same holds for panels and injected components.",
+        "`blocking` if answering is impossible without a mouse."
       ]
     },
     {
       "id": "THEME-001",
-      "title": "Тема нечитаема",
+      "title": "The theme is unreadable",
       "defaultSeverity": "warning",
       "guidance": [
-        "Проверьте контраст пар «текст — фон»: `on-surface` не задаётся и берётся из базовой темы по `dark`, поэтому сверяйте `background`, `surface` и `surface-variant` с цветом текста базовой темы, а также `primary`/`on-primary`, `secondary`/`on-secondary`, `error`, `warning`, `success`, `info` на поверхностях.",
-        "Порог — WCAG AA 4,5:1 для текста; `blocking`, если основной текст нечитаем (контраст ниже 3:1)."
+        "Check the contrast of text/background pairs: `on-surface` may be left unset and then comes from the base theme by `dark`, so compare `background`, `surface` and `surface-variant` with the text color of the base theme, and `primary`/`on-primary`, `secondary`/`on-secondary`, `error`, `warning`, `success` and `info` on the surfaces.",
+        "The threshold is WCAG AA 4.5:1 for text; `blocking` if the main text is unreadable (contrast below 3:1)."
       ]
     },
     {
       "id": "CORRECTNESS-001",
-      "title": "Логическая ошибка приводит к неверному результату",
+      "title": "A logic error gives a wrong result",
       "defaultSeverity": "blocking",
       "guidance": [
-        "Сообщайте только о ошибках с высокой уверенностью: неверная оценка ответа, потеря данных, падение в типичном сценарии. Опишите конкретный путь выполнения и наблюдаемый неверный результат.",
-        "Для вида задания: `grade` не должен пропускать неверные ответы и отвергать верные; `referenceAnswer` должен проходить собственную проверку.",
-        "Не сообщайте о гипотетических крайних случаях и косметике."
+        "Report only high-confidence errors: a wrongly graded answer, data loss, a crash in a typical scenario. Describe the concrete execution path and the observable wrong result.",
+        "For an exercise type: `grade` must not accept wrong answers or reject right ones; `referenceAnswer` must pass its own check.",
+        "Do not report hypothetical edge cases or cosmetics."
       ]
     },
     {
       "id": "QUALITY-001",
-      "title": "Обфусцированный, минифицированный, мёртвый или сгенерированный код",
+      "title": "Obfuscated, minified, dead or generated code",
       "defaultSeverity": "warning",
       "guidance": [
-        "Исходники должны поддаваться проверке человеком. Отклоняйте обфускацию и минифицированный код в репозитории; отмечайте мёртвые ветки, закомментированные блоки разработки и необъяснённый сгенерированный код."
+        "The sources must be reviewable by a person. Reject obfuscation and minified code in the repository; report dead branches, commented-out development blocks and unexplained generated code."
       ]
     },
     {
       "id": "DECEPTION-001",
-      "title": "Поведение не соответствует заявленному",
+      "title": "Behavior does not match what is stated",
       "defaultSeverity": "blocking",
       "guidance": [
-        "Отмечайте конкретные вводящие в заблуждение названия, скрытое поведение, расхождение с описанием, скрытое выполнение и необъяснённую передачу данных. Смутные подозрения без конкретики не считаются."
+        "Report concrete misleading names, hidden behavior, mismatches with the description, hidden execution and unexplained transfer of data. Vague suspicion without specifics does not count."
       ]
     }
   ]

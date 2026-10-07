@@ -76,6 +76,16 @@ jobs:
             git -C site remote add origin "$remote"
           fi
 
+      # the index written by the tools of app 0.4 cannot be read by the 0.5 tools, and
+      # its versions have manifests of the old format: start a new index.v2.json
+      # (the old version directories and index.json stay for apps older than 0.5)
+      - name: Drop the legacy index
+        run: |
+          if node scripts/legacy-index.mjs site/index.v2.json; then
+            echo 'index.v2.json is of the legacy (0.4) format: dropped'
+            rm site/index.v2.json
+          fi
+
       - name: Install extension dependencies
         if: env.IDS != ''
         run: |
