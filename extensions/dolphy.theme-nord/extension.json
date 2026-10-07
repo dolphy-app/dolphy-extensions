@@ -1,48 +1,13 @@
 {
   "id": "dolphy.theme-nord",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "apiVersion": 1,
   "name": "Nord",
   "description": "Тёмная тема Nord: арктическая сине-серая основа и ледяной голубой акцент",
   "author": "Tinkerbells",
   "icon": "assets/icon.png",
-  "contributes": {
-    "themes": [
-      {
-        "id": "dolphy.theme-nord",
-        "label": "Nord",
-        "dark": true,
-        "colors": {
-          "background": "#2E3440",
-          "surface": "#3B4252",
-          "surface-bright": "#4C566A",
-          "surface-light": "#434C5E",
-          "surface-variant": "#434C5E",
-          "on-background": "#ECEFF4",
-          "on-surface": "#ECEFF4",
-          "on-surface-variant": "#D8DEE9",
-          "primary": "#88C0D0",
-          "on-primary": "#2E3440",
-          "secondary": "#A3BE8C",
-          "on-secondary": "#2E3440",
-          "error": "#BF616A",
-          "on-error": "#ECEFF4",
-          "warning": "#EBCB8B",
-          "on-warning": "#2E3440",
-          "success": "#A3BE8C",
-          "on-success": "#2E3440",
-          "info": "#8FBCBB",
-          "on-info": "#2E3440",
-          "hero-start": "#88C0D0",
-          "hero-end": "#81A1C1",
-          "hero-contrast": "#2E3440"
-        },
-        "variables": {
-          "border-color": "#D8DEE9",
-          "border-opacity": 0.2,
-          "medium-emphasis-opacity": 0.78
-        }
-      }
-    ]
-  }
+  "minAppVersion": "0.5.0",
+  "tags": [
+    "theme"
+  ]
 }

@@ -1,0 +1,35 @@
+{
+  "id": "dolphy.theme-midnight",
+  "label": "Полночь",
+  "dark": true,
+  "colors": {
+    "background": "#0B1220",
+    "surface": "#131C2E",
+    "surface-bright": "#243350",
+    "surface-light": "#1C2842",
+    "surface-variant": "#1C2842",
+    "on-background": "#E6EDF7",
+    "on-surface": "#E6EDF7",
+    "on-surface-variant": "#A9B8D0",
+    "primary": "#22D3EE",
+    "on-primary": "#04222B",
+    "secondary": "#A5B4FC",
+    "on-secondary": "#12163A",
+    "error": "#F87171",
+    "on-error": "#2A0A0A",
+    "warning": "#FBBF24",
+    "on-warning": "#2B1D00",
+    "success": "#4ADE80",
+    "on-success": "#052E16",
+    "info": "#60A5FA",
+    "on-info": "#0A1F3D",
+    "hero-start": "#0E7490",
+    "hero-end": "#1E3A8A",
+    "hero-contrast": "#FFFFFF"
+  },
+  "variables": {
+    "border-color": "#9FB4D6",
+    "border-opacity": 0.16,
+    "medium-emphasis-opacity": 0.74
+  }
+}

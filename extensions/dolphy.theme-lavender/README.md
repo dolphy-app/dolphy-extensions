@@ -4,7 +4,8 @@ A soft light theme for Dolphy: pale lavender background, white cards and a viole
 
 - Contribution: the theme `dolphy.theme-lavender` (“Settings → Appearance”; listed there as “Лаванда”).
 - Icon: `assets/icon.png`, a 128×128 miniature of the app drawn from the theme's own colors (background, card, primary button, secondary accent, text lines). Regenerate it with `node scripts/theme-icon.mjs extensions/dolphy.theme-lavender` from the repository root.
-- No code: the extension consists of `extension.json` and the icon, so it needs no permissions.
+- Layout (app 0.5 format): `extension.json` holds the metadata (`minAppVersion` 0.5.0, tag `theme`), `src/theme.json` holds the theme and `src/index.ts` registers it from the `client` export with `addTheme`; `dolphy-ext build` produces `client.mjs`. The theme is plain data, with no server part. The extension runs with the rights of the app, but this one reads no files, uses no network and stores nothing.
+- Versions: 2.0.0 moves the extension to the app 0.5 format (requires Dolphy 0.5.0 or newer; the colors are unchanged); 1.0.0 was the first release. Apps older than 0.5 keep 1.0.0.
 - Base: a light theme (`dark: false`). Every text color is set explicitly (`on-background`, `on-surface`, `on-surface-variant`, `on-primary`, `on-secondary` and the `on-*` colors of the status colors), so contrast does not depend on the Vuetify base theme.
 
 ## Palette
@@ -20,7 +21,7 @@ A soft light theme for Dolphy: pale lavender background, white cards and a viole
 
 ## Contrast
 
-WCAG 2.x contrast ratios computed from the colors in `extension.json`. Every text pair is at least 4.5:1, and the `primary` accent against `background` is 6.42:1 (at least 3:1 is required for non-text elements).
+WCAG 2.x contrast ratios computed from the colors in `src/theme.json`. Every text pair is at least 4.5:1, and the `primary` accent against `background` is 6.42:1 (at least 3:1 is required for non-text elements).
 
 | Pair | Ratio |
 | --- | --- |

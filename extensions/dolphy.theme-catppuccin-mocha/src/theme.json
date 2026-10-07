@@ -1,0 +1,35 @@
+{
+  "id": "dolphy.theme-catppuccin-mocha",
+  "label": "Catppuccin Mocha",
+  "dark": true,
+  "colors": {
+    "background": "#181825",
+    "surface": "#1E1E2E",
+    "surface-bright": "#45475A",
+    "surface-light": "#313244",
+    "surface-variant": "#313244",
+    "on-background": "#CDD6F4",
+    "on-surface": "#CDD6F4",
+    "on-surface-variant": "#BAC2DE",
+    "primary": "#CBA6F7",
+    "on-primary": "#11111B",
+    "secondary": "#94E2D5",
+    "on-secondary": "#11111B",
+    "error": "#F38BA8",
+    "on-error": "#11111B",
+    "warning": "#F9E2AF",
+    "on-warning": "#11111B",
+    "success": "#A6E3A1",
+    "on-success": "#11111B",
+    "info": "#89DCEB",
+    "on-info": "#11111B",
+    "hero-start": "#CBA6F7",
+    "hero-end": "#89B4FA",
+    "hero-contrast": "#11111B"
+  },
+  "variables": {
+    "border-color": "#7F849C",
+    "border-opacity": 0.24,
+    "medium-emphasis-opacity": 0.78
+  }
+}
