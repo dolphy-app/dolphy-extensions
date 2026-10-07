@@ -1,7 +1,7 @@
 {
   "name": "dolphy-extensions",
   "private": true,
-  "description": "Каталог расширений Dolphy: инструменты проверки и сборки для CI",
+  "description": "Dolphy extension catalog: the checking and building tools for CI",
   "engines": {
     "node": ">=22.12"
   },
