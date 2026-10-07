@@ -1,0 +1,15 @@
+{
+  "id": "dolphy.theme-catppuccin-macchiato",
+  "version": "2.0.0",
+  "apiVersion": 1,
+  "name": "Catppuccin Macchiato",
+  "description": "Тёмная тема Catppuccin Macchiato: глубокая сине-серая основа и розовый акцент",
+  "author": "Tinkerbells",
+  "icon": "assets/icon.png",
+  "minAppVersion": "0.5.0",
+  "tags": [
+    "theme"
+  ],
+  "main": null,
+  "client": "./client.mjs"
+}

@@ -1,0 +1,42 @@
+var theme_default = {
+	id: "dolphy.theme-gruvbox-dark",
+	label: "Gruvbox Dark",
+	dark: true,
+	colors: {
+		"background": "#1D2021",
+		"surface": "#282828",
+		"surface-bright": "#504945",
+		"surface-light": "#3C3836",
+		"surface-variant": "#3C3836",
+		"on-background": "#EBDBB2",
+		"on-surface": "#EBDBB2",
+		"on-surface-variant": "#BDAE93",
+		"primary": "#FE8019",
+		"on-primary": "#1D2021",
+		"secondary": "#8EC07C",
+		"on-secondary": "#1D2021",
+		"error": "#FB4934",
+		"on-error": "#1D2021",
+		"warning": "#FABD2F",
+		"on-warning": "#1D2021",
+		"success": "#B8BB26",
+		"on-success": "#1D2021",
+		"info": "#83A598",
+		"on-info": "#1D2021",
+		"hero-start": "#AF3A03",
+		"hero-end": "#8F3F71",
+		"hero-contrast": "#FBF1C7"
+	},
+	variables: {
+		"border-color": "#BDAE93",
+		"border-opacity": .2,
+		"medium-emphasis-opacity": .78
+	}
+};
+//#endregion
+//#region extensions/dolphy.theme-gruvbox-dark/src/index.ts
+var client = (client) => {
+	client.addTheme(theme_default);
+};
+//#endregion
+export { client };
