@@ -1,0 +1,35 @@
+{
+  "id": "theme-one-light",
+  "label": "One Light",
+  "dark": false,
+  "colors": {
+    "background": "#FAFAFA",
+    "surface": "#FFFFFF",
+    "surface-bright": "#FFFFFF",
+    "surface-light": "#EAEAEB",
+    "surface-variant": "#EAEAEB",
+    "on-background": "#232324",
+    "on-surface": "#232324",
+    "on-surface-variant": "#383A42",
+    "primary": "#A626A4",
+    "on-primary": "#FFFFFF",
+    "secondary": "#4078F2",
+    "on-secondary": "#FFFFFF",
+    "error": "#CA1243",
+    "on-error": "#FFFFFF",
+    "warning": "#B76B01",
+    "on-warning": "#FFFFFF",
+    "success": "#50A14F",
+    "on-success": "#FFFFFF",
+    "info": "#0184BC",
+    "on-info": "#FFFFFF",
+    "hero-start": "#A626A4",
+    "hero-end": "#4078F2",
+    "hero-contrast": "#FFFFFF"
+  },
+  "variables": {
+    "border-color": "#383A42",
+    "border-opacity": 0.14,
+    "medium-emphasis-opacity": 0.8
+  }
+}
