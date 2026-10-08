@@ -9,10 +9,8 @@ const props = withDefaults(
     label: string;
     size?: number;
     width?: number;
-    /** `hero` sits on the accent gradient, `plain` on a card surface. */
-    tone?: 'hero' | 'plain';
   }>(),
-  { size: 168, width: 14, tone: 'plain' },
+  { size: 112, width: 6 },
 );
 
 const radius = computed(() => (props.size - props.width) / 2);
@@ -46,7 +44,7 @@ onBeforeUnmount(() => cancelAnimationFrame(frame));
 <template>
   <div
     class="ring"
-    :class="[`ring--${tone}`, { 'ring--reached': reached }]"
+    :class="{ 'ring--reached': reached }"
     :style="{ width: `${size}px`, height: `${size}px` }"
     role="progressbar"
     :aria-label="label"
@@ -95,11 +93,7 @@ onBeforeUnmount(() => cancelAnimationFrame(frame));
 }
 
 .ring__track {
-  stroke: rgba(var(--v-theme-on-surface), 0.12);
-}
-
-.ring--hero .ring__track {
-  stroke: rgba(var(--v-theme-hero-contrast), 0.28);
+  stroke: rgba(var(--v-border-color), calc(var(--v-border-opacity) * 1.6));
 }
 
 .ring__bar {
@@ -108,10 +102,6 @@ onBeforeUnmount(() => cancelAnimationFrame(frame));
     stroke-dashoffset 400ms cubic-bezier(0.22, 1, 0.36, 1),
     stroke 300ms ease,
     opacity 200ms ease;
-}
-
-.ring--hero .ring__bar {
-  stroke: rgb(var(--v-theme-hero-contrast));
 }
 
 .ring--reached .ring__bar {
@@ -127,7 +117,6 @@ onBeforeUnmount(() => cancelAnimationFrame(frame));
   position: absolute;
   inset: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }

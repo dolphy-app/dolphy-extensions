@@ -2,9 +2,9 @@
 import { useApp } from '@dolphy-app/extension-sdk/client';
 import { computed } from 'vue';
 import DayBars from './DayBars.vue';
-import LeagueCard from './LeagueCard.vue';
 import NoticeBox from './NoticeBox.vue';
-import TodayHero from './TodayHero.vue';
+import TodayCard from './TodayCard.vue';
+import type { XpEntry } from './shared/types.ts';
 import { useGamification } from './useGamification.ts';
 
 const app = useApp();
@@ -17,22 +17,7 @@ const reachedDays = computed(
   () => status.value?.history.filter((day) => day.reached).length ?? 0,
 );
 
-const RESULT_ICONS = {
-  promoted: 'mdi-arrow-up-bold-circle',
-  demoted: 'mdi-arrow-down-bold-circle',
-  kept: 'mdi-minus-circle',
-} as const;
-const RESULT_COLORS = {
-  promoted: 'success',
-  demoted: 'warning',
-  kept: 'on-surface',
-} as const;
-
-const entryText = (entry: {
-  kind: 'attempt' | 'perfect-bonus';
-  xp: number;
-  grade: number | null;
-}) => {
+const entryText = (entry: XpEntry) => {
   if (entry.kind === 'perfect-bonus')
     return f.value.t('entryBonus', { xp: entry.xp });
   return entry.grade === null
@@ -40,38 +25,41 @@ const entryText = (entry: {
     : f.value.t('entryGrade', { xp: entry.xp, grade: entry.grade });
 };
 
-const openSettings = () => app.openSettings('xp-goals');
+// entries of today show the time, older ones the date and the time
+const entryTime = (entry: XpEntry) =>
+  status.value !== null &&
+  new Date(entry.at).toDateString() ===
+    new Date(`${status.value.today.date}T00:00`).toDateString()
+    ? f.value.time(entry.at)
+    : f.value.dateTime(entry.at);
 
-// opens today's plan with the app's own navigation command
-const toPlan = async () => {
-  try {
-    await app.runCommand('app:go:dailyPlan');
-  } catch {
-    app.notify(f.value.t('commandFailed'), 'error');
-  }
-};
+const openSettings = () => app.openSettings('xp-goals');
 </script>
 
 <template>
   <section class="xp" data-testid="xp-panel">
     <div class="xp__inner">
       <header class="xp__header">
-        <h1 class="xp__title" data-testid="xp-title">{{ f.t('title') }}</h1>
-        <div class="xp__meta">
-          <p v-if="status !== null" class="xp__date">
-            {{ f.dayLong(status.today.date) }}
-          </p>
-          <v-btn
-            class="xp__refresh"
-            variant="tonal"
-            prepend-icon="mdi-refresh"
-            :aria-busy="loading"
-            data-testid="xp-refresh"
-            @click="load"
+        <div class="xp__heading">
+          <h1
+            class="xp__title text-headline-large font-weight-bold"
+            data-testid="xp-title"
           >
-            {{ f.t('refresh') }}
-          </v-btn>
+            {{ f.t('title') }}
+          </h1>
+          <p class="xp__date text-body-large">
+            {{ status === null ? '' : f.dayLong(status.today.date) }}
+          </p>
         </div>
+        <v-btn
+          class="xp__refresh"
+          icon="mdi-refresh"
+          variant="text"
+          :aria-label="f.t('refresh')"
+          :aria-busy="loading"
+          data-testid="xp-refresh"
+          @click="load"
+        />
       </header>
 
       <div class="xp__loadbar">
@@ -89,7 +77,16 @@ const toPlan = async () => {
         role="alert"
         data-testid="xp-error"
       >
-        {{ f.t('loadFailed') }} {{ error }}
+        <div class="xp__note">
+          <span>{{ f.t('loadFailed') }} {{ error }}</span>
+          <v-btn
+            variant="text"
+            size="small"
+            data-testid="xp-retry"
+            @click="load"
+            >{{ f.t('retry') }}</v-btn
+          >
+        </div>
       </NoticeBox>
 
       <div
@@ -99,11 +96,9 @@ const toPlan = async () => {
         :aria-label="f.t('loading')"
         data-testid="xp-loading"
       >
-        <div class="xp__skeleton-hero" />
-        <div class="xp__row xp__row--main">
-          <div class="xp__skeleton-card" />
-          <div class="xp__skeleton-card" />
-        </div>
+        <div class="xp__skeleton-block xp__skeleton-block--today" />
+        <div class="xp__skeleton-block xp__skeleton-block--stats" />
+        <div class="xp__skeleton-block xp__skeleton-block--history" />
       </div>
 
       <template v-if="status !== null">
@@ -113,179 +108,90 @@ const toPlan = async () => {
           icon="mdi-information-outline"
           data-testid="xp-disabled"
         >
-          <div class="xp__alert">
+          <div class="xp__note">
             <span>{{ f.t('disabled') }}</span>
-            <v-btn variant="outlined" @click="openSettings">{{
+            <v-btn variant="text" size="small" @click="openSettings">{{
               f.t('openSettings')
             }}</v-btn>
           </div>
         </NoticeBox>
 
-        <TodayHero :status="status" :f="f" />
+        <TodayCard :status="status" :f="f" />
 
-        <div class="xp__row xp__row--main">
-          <LeagueCard :status="status" :f="f" />
-
-          <v-card class="xp-card xp__totals" data-testid="xp-totals">
-            <h2 class="xp-card__title">{{ f.t('totals') }}</h2>
-            <div class="xp__stats">
-              <div class="xp__stat">
-                <span class="xp__stat-icon" aria-hidden="true">
-                  <v-icon icon="mdi-star-four-points" size="24" />
-                </span>
-                <div>
-                  <div class="xp__stat-value" data-testid="xp-total">
-                    {{ f.number(status.totalXp) }} XP
-                  </div>
-                  <div class="xp__muted">{{ f.t('totalXp') }}</div>
-                </div>
-              </div>
-              <div class="xp__stat">
-                <span class="xp__stat-icon" aria-hidden="true">
-                  <v-icon icon="mdi-check-decagram" size="24" />
-                </span>
-                <div>
-                  <div class="xp__stat-value xp__stat-value--small">
-                    {{ f.tn('perfectSessions', status.perfectSessions) }}
-                  </div>
-                </div>
-              </div>
+        <v-card class="xp__section" data-testid="xp-stats">
+          <dl class="stats">
+            <div class="stats__cell">
+              <dt>{{ f.t('streak') }}</dt>
+              <dd data-testid="xp-streak">
+                {{ f.tn('streakDays', status.streak.current) }}
+              </dd>
             </div>
-          </v-card>
-        </div>
+            <div class="stats__cell">
+              <dt>{{ f.t('thisWeek') }}</dt>
+              <dd data-testid="xp-week-xp">
+                {{ f.t('xpAmount', { n: f.number(status.week.xp) }) }}
+              </dd>
+            </div>
+            <div class="stats__cell">
+              <dt>{{ f.t('total') }}</dt>
+              <dd data-testid="xp-total">
+                {{ f.t('xpAmount', { n: f.number(status.totalXp) }) }}
+              </dd>
+            </div>
+          </dl>
+        </v-card>
 
-        <v-card
-          v-if="!historyEmpty"
-          class="xp-card xp__history"
-          data-testid="xp-history"
-        >
-          <div class="xp__card-head">
-            <h2 class="xp-card__title">{{ f.t('history') }}</h2>
-            <span class="xp__muted">{{
+        <v-card class="xp__section" data-testid="xp-history">
+          <div class="xp__head">
+            <h2 class="xp__h2">{{ f.t('history') }}</h2>
+            <span v-if="reachedDays > 0" class="xp__muted">{{
               f.t('historyReachedCount', { n: reachedDays })
             }}</span>
           </div>
-          <DayBars :days="status.history" :goal="status.today.goal" :f="f" />
+          <p
+            v-if="historyEmpty"
+            class="xp__muted xp__empty"
+            data-testid="xp-history-empty"
+          >
+            {{ f.t('historyEmpty') }}
+          </p>
+          <DayBars
+            v-else
+            :days="status.history"
+            :goal="status.today.goal"
+            :f="f"
+          />
         </v-card>
 
         <v-card
-          v-else
-          class="xp-card xp__history xp__history--empty"
-          data-testid="xp-history-empty"
+          v-if="status.recent.length > 0"
+          class="xp__section"
+          data-testid="xp-recent"
         >
-          <v-icon icon="mdi-chart-box-outline" size="40" />
-          <h2 class="xp-card__title">{{ f.t('historyEmptyTitle') }}</h2>
-          <p class="xp__muted">{{ f.t('historyEmptyText') }}</p>
-          <v-btn variant="tonal" color="primary" @click="toPlan">{{
-            f.t('toPlan')
-          }}</v-btn>
+          <h2 class="xp__h2">{{ f.t('recent') }}</h2>
+          <ul class="xp__list">
+            <li
+              v-for="entry in status.recent"
+              :key="`${entry.at}-${entry.kind}`"
+              class="xp__item"
+              data-testid="xp-entry"
+            >
+              <span class="xp__item-main">{{ entryText(entry) }}</span>
+              <time
+                class="xp__muted"
+                :datetime="new Date(entry.at).toISOString()"
+                >{{ entryTime(entry) }}</time
+              >
+            </li>
+          </ul>
         </v-card>
-
-        <div
-          v-if="status.weeks.length > 0 || status.recent.length > 0"
-          class="xp__row xp__row--lists"
-        >
-          <v-card
-            v-if="status.weeks.length > 0"
-            class="xp-card"
-            data-testid="xp-weeks"
-          >
-            <h2 class="xp-card__title">{{ f.t('weeks') }}</h2>
-            <ul class="xp__list">
-              <li
-                v-for="week in status.weeks"
-                :key="week.start"
-                class="xp__item"
-                data-testid="xp-week"
-              >
-                <div class="xp__item-main">
-                  <span>{{
-                    f.t('weekOf', { date: f.dayMonth(week.start) })
-                  }}</span>
-                  <span class="xp__muted">{{ f.tier(week.tier) }}</span>
-                </div>
-                <div class="xp__item-side">
-                  <span class="xp__item-xp">{{ f.number(week.xp) }} XP</span>
-                  <span class="xp__result">
-                    <v-icon
-                      :icon="RESULT_ICONS[week.result]"
-                      :color="RESULT_COLORS[week.result]"
-                      size="18"
-                    />
-                    {{ f.t(week.result) }}
-                  </span>
-                </div>
-              </li>
-            </ul>
-          </v-card>
-
-          <v-card
-            v-if="status.recent.length > 0"
-            class="xp-card"
-            data-testid="xp-recent"
-          >
-            <h2 class="xp-card__title">{{ f.t('recent') }}</h2>
-            <ul class="xp__list">
-              <li
-                v-for="entry in status.recent"
-                :key="`${entry.at}-${entry.kind}`"
-                class="xp__item"
-                data-testid="xp-entry"
-              >
-                <v-icon
-                  :icon="
-                    entry.kind === 'perfect-bonus'
-                      ? 'mdi-star-circle'
-                      : 'mdi-plus-circle-outline'
-                  "
-                  size="20"
-                />
-                <span class="xp__item-main">{{ entryText(entry) }}</span>
-                <time
-                  class="xp__muted"
-                  :datetime="new Date(entry.at).toISOString()"
-                  >{{ f.dateTime(entry.at) }}</time
-                >
-              </li>
-            </ul>
-          </v-card>
-        </div>
       </template>
     </div>
   </section>
 </template>
 
-<style>
-/*
- * The card surface of the panel. In the dark theme the plain surface sits too
- * close to the page background, so the card is lifted by a share of the text
- * colour: a tonal surface made of theme tokens only.
- */
-.xp-card {
-  --xp-card-bg: rgb(var(--v-theme-surface));
-  border-radius: 16px;
-  background: var(--xp-card-bg);
-}
-
-.v-theme--dark .xp-card {
-  --xp-card-bg: color-mix(
-    in srgb,
-    rgb(var(--v-theme-surface)),
-    rgb(var(--v-theme-on-surface)) 6%
-  );
-}
-
-.xp-card__title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.3;
-}
-</style>
-
 <style scoped>
 .xp {
-  container-type: inline-size;
   width: 100%;
   min-height: 100%;
   overflow-y: auto;
@@ -297,36 +203,30 @@ const toPlan = async () => {
   flex-direction: column;
   gap: 24px;
   width: 100%;
-  max-width: 1100px;
+  max-width: 704px;
   margin: 0 auto;
-  padding: 24px 32px 48px;
+  padding: 32px 24px 48px;
 }
 
 .xp__header {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 8px 16px;
+  gap: 16px;
+}
+
+.xp__heading {
+  min-width: 0;
 }
 
 .xp__title {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 2rem;
 }
 
-.xp__meta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-left: auto;
-}
-
+/* reserves its line while the status loads: the page must not jump */
 .xp__date {
-  margin: 0;
-  font-size: 1rem;
+  min-height: 1.5rem;
+  margin: 4px 0 0;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
@@ -334,20 +234,25 @@ const toPlan = async () => {
   text-transform: uppercase;
 }
 
+.xp__refresh {
+  flex: none;
+  margin-top: 4px;
+}
+
 /* out of the flow: the bar appearing must not move the page */
 .xp__loadbar {
   position: absolute;
   top: 0;
-  right: 32px;
-  left: 32px;
+  right: 24px;
+  left: 24px;
 }
 
-.xp__alert {
+.xp__note {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px 16px;
 }
 
 .xp__skeleton {
@@ -356,20 +261,22 @@ const toPlan = async () => {
   gap: 24px;
 }
 
-.xp__skeleton-hero,
-.xp__skeleton-card {
+.xp__skeleton-block {
+  border-radius: 8px;
   background: rgba(var(--v-theme-on-surface), 0.08);
   animation: xp-pulse 1.4s ease-in-out infinite;
 }
 
-.xp__skeleton-hero {
-  height: 340px;
-  border-radius: 24px;
+.xp__skeleton-block--today {
+  height: 268px;
 }
 
-.xp__skeleton-card {
-  height: 300px;
-  border-radius: 16px;
+.xp__skeleton-block--stats {
+  height: 106px;
+}
+
+.xp__skeleton-block--history {
+  height: 230px;
 }
 
 @keyframes xp-pulse {
@@ -379,107 +286,88 @@ const toPlan = async () => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .xp__skeleton-hero,
-  .xp__skeleton-card {
+  .xp__skeleton-block {
     animation: none;
   }
 }
 
-.xp__row {
-  display: grid;
-  gap: 24px;
-}
-
-.xp__row--main {
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-}
-
-.xp__row--lists {
-  align-items: start;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-}
-
-.xp__totals,
-.xp__history {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.xp__section {
   padding: 24px;
 }
 
-.xp__stats {
-  display: grid;
-  flex: 1;
-  grid-auto-rows: 1fr;
-  gap: 24px;
-}
-
-.xp__card-head {
+.xp__head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 4px 16px;
+  gap: 0 16px;
+  margin-bottom: 16px;
 }
 
-.xp__history--empty {
-  align-items: center;
-  padding: 40px 24px;
-  text-align: center;
-}
-
-.xp__history--empty .v-icon {
-  color: rgb(var(--v-theme-primary));
-}
-
-.xp__stat {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-/* two equal rows with a divider: the card is as tall as the league next to it */
-.xp__stat + .xp__stat {
-  align-self: stretch;
-  padding-top: 24px;
-  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-
-.xp__stat-icon {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  color: rgb(var(--v-theme-primary));
-  background: rgba(var(--v-theme-primary), 0.12);
-}
-
-.xp__stat-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1.2;
-  font-variant-numeric: tabular-nums;
-}
-
-.xp__stat-value--small {
+.xp__h2 {
+  margin: 0;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.xp__section > .xp__h2 {
+  margin-bottom: 8px;
 }
 
 .xp__muted {
   font-size: 0.875rem;
+  line-height: 1.5;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
-.xp-card:has(> .xp__list) {
-  padding: 24px 24px 12px;
+.xp__empty {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+
+.stats__cell {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+  min-width: 0;
+  padding: 0 24px;
+}
+
+.stats__cell:first-child {
+  padding-left: 0;
+}
+
+.stats__cell:last-child {
+  padding-right: 0;
+}
+
+.stats__cell + .stats__cell {
+  border-left: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.stats__cell dt {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+
+.stats__cell dd {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.33;
+  font-variant-numeric: tabular-nums;
 }
 
 .xp__list {
-  margin: 12px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -487,9 +375,9 @@ const toPlan = async () => {
 .xp__item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 48px;
-  padding: 8px 0;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 40px;
 }
 
 .xp__item + .xp__item {
@@ -497,53 +385,11 @@ const toPlan = async () => {
 }
 
 .xp__item-main {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
   min-width: 0;
 }
 
-.xp__item-side {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.xp__item-xp {
-  font-weight: 500;
+.xp__item time {
+  flex: none;
   font-variant-numeric: tabular-nums;
-}
-
-.xp__result {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  min-width: 150px;
-  font-size: 0.875rem;
-}
-
-@container (max-width: 760px) {
-  .xp__stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px 40px;
-  }
-
-  .xp__stat + .xp__stat {
-    padding-top: 0;
-    border-top: 0;
-  }
-
-  .xp__inner {
-    padding: 16px 16px 32px;
-  }
-
-  .xp__row--main {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .xp__result {
-    min-width: 0;
-  }
 }
 </style>
