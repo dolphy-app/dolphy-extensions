@@ -1,0 +1,13 @@
+{
+  "id": "theme-sunrise",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "name": "Рассвет",
+  "description": "Тёплая светлая тема с янтарным акцентом и мягкими бежевыми поверхностями",
+  "author": "Tinkerbells",
+  "icon": "assets/icon.png",
+  "minAppVersion": "0.5.0",
+  "tags": [
+    "theme"
+  ]
+}
