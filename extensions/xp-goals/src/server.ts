@@ -6,7 +6,6 @@ import {
   goalReachedDate,
   initialState,
   parseState,
-  rollWeeks,
   startSession,
   statusOf,
 } from './core/xp.ts';
@@ -15,7 +14,7 @@ import { statusRpc } from './shared/rpc.ts';
 
 const ID = 'xp-goals';
 const KEY = 'state';
-const GROUP = { en: 'XP and leagues', ru: 'XP и лиги' };
+const GROUP = { en: 'XP goals', ru: 'XP и цели' };
 
 export const server = defineServer((s) => {
   s.registerSettings([
@@ -47,18 +46,6 @@ export const server = defineServer((s) => {
       order: 2,
     },
     {
-      id: `${ID}.leagues`,
-      type: 'boolean',
-      label: { en: 'Weekly leagues', ru: 'Недельные лиги' },
-      description: {
-        en: 'Promotion and demotion at the end of each week.',
-        ru: 'Повышение и понижение в конце каждой недели.',
-      },
-      group: GROUP,
-      default: true,
-      order: 3,
-    },
-    {
       id: `${ID}.notify`,
       type: 'boolean',
       label: {
@@ -67,13 +54,12 @@ export const server = defineServer((s) => {
       },
       group: GROUP,
       default: true,
-      order: 4,
+      order: 3,
     },
   ]);
 
   const settings = (): Settings => ({
     dailyGoal: Number(s.settings.get(`${ID}.daily-goal`)),
-    leagues: Boolean(s.settings.get(`${ID}.leagues`)),
     notify: Boolean(s.settings.get(`${ID}.notify`)),
     enabled: Boolean(s.settings.get(`${ID}.enabled`)),
   });
@@ -112,7 +98,7 @@ export const server = defineServer((s) => {
     enqueue(async () => {
       const cfg = settings();
       if (!cfg.enabled) return;
-      await save(startSession(rollWeeks(await load(), event.at, cfg), event));
+      await save(startSession(await load(), event));
     }),
   );
 
@@ -120,7 +106,7 @@ export const server = defineServer((s) => {
     enqueue(async () => {
       const cfg = settings();
       if (!cfg.enabled) return;
-      const state = applyAttempt(rollWeeks(await load(), event.at, cfg), event);
+      const state = applyAttempt(await load(), event);
       await save(state);
       await announce(state, event.at, cfg);
     }),
@@ -130,10 +116,7 @@ export const server = defineServer((s) => {
     enqueue(async () => {
       const cfg = settings();
       if (!cfg.enabled) return;
-      const state = finishSession(
-        rollWeeks(await load(), event.at, cfg),
-        event,
-      );
+      const state = finishSession(await load(), event);
       await save(state);
       await announce(state, event.at, cfg);
     }),
@@ -143,8 +126,7 @@ export const server = defineServer((s) => {
     enqueue(async () => {
       const cfg = settings();
       const now = Date.now();
-      const state = rollWeeks(await load(), now, cfg);
-      await save(state);
+      const state = await load();
       return statusOf(state, now, cfg, await s.stats.streak());
     }),
   );

@@ -51,7 +51,6 @@ describe(`${ID}: server`, () => {
     const status = await running.rpc(statusRpc, {});
     expect(status.today.xp).toBe(3 + 2 + 1 + 1);
     expect(status.totalXp).toBe(7);
-    expect(status.perfectSessions).toBe(1);
     expect(status.recent.map((e) => e.kind)).toEqual([
       'perfect-bonus',
       'attempt',
@@ -59,7 +58,8 @@ describe(`${ID}: server`, () => {
       'attempt',
     ]);
     expect(status.history).toHaveLength(14);
-    expect(status.league.tier).toBe('bronze');
+    expect(status.week.xp).toBe(7);
+    expect(status.week.days).toHaveLength(7);
   });
 
   it('notifies once a day when the goal is reached', async () => {
@@ -108,29 +108,34 @@ describe(`${ID}: server`, () => {
     await running.settings.set(`${ID}.daily-goal`, 60);
     const status = await running.rpc(statusRpc, {});
     expect(status.today.goal).toBe(60);
-    expect(status.week.promoteAt).toBe(300);
+    expect(status.week.days[2]).toMatchObject({ today: true, xp: 1 });
   });
 
-  it('closes a past week on status and promotes the league', async () => {
-    const running = await start({ settingValues: { [`${ID}.daily-goal`]: 5 } });
-    const lastWeek = new Date(2026, 9, 1, 12).getTime(); // Thursday
-    await running.events.emit('session.started', {
-      sessionId: 's',
-      at: lastWeek,
-    });
-    for (let i = 1; i <= 40; i += 1) {
-      await running.events.emit(
-        'attempt.closed',
-        closed(lastWeek + i * 5 * MIN),
-      );
-    }
+  it('reads the state an older build with leagues stored and writes it back without them', async () => {
+    const running = await start();
+    await running.storage.set('state', {
+      v: 1,
+      totalXp: 43,
+      days: { '2026-10-07': 3 },
+      weeks: [{ start: '2026-09-28', xp: 150, tier: 'bronze', result: 'kept' }],
+      league: { tier: 'gold', processedUntil: '2026-10-05' },
+      recent: [],
+      session: null,
+      goalNotifiedDate: null,
+      perfectSessions: 2,
+    } as never);
     const status = await running.rpc(statusRpc, {});
-    expect(status.weeks[0]).toMatchObject({
-      start: '2026-09-28',
-      tier: 'bronze',
-      result: 'promoted',
-    });
-    expect(status.league.tier).toBe('silver');
+    expect(status.totalXp).toBe(43);
+    expect(status.today.xp).toBe(3);
+    await running.events.emit('attempt.closed', closed(NOW + MIN));
+    const stored = (await running.storage.get('state')) as Record<
+      string,
+      unknown
+    >;
+    expect(stored.totalXp).toBe(44);
+    expect(stored).not.toHaveProperty('league');
+    expect(stored).not.toHaveProperty('weeks');
+    expect(stored).not.toHaveProperty('perfectSessions');
   });
 
   it('keeps the records of concurrently delivered events', async () => {

@@ -26,6 +26,3 @@ const dayIndex = (key: string): number => (parse(key).getDay() + 6) % 7;
 /** Monday of the week the date belongs to. */
 export const weekStartOf = (key: string): string =>
   addDays(key, -dayIndex(key));
-
-/** Days until the next Monday, the given day included (1..7). */
-export const daysLeftInWeek = (key: string): number => 7 - dayIndex(key);
