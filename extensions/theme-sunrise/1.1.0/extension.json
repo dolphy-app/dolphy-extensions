@@ -1,0 +1,21 @@
+{
+  "id": "theme-sunrise",
+  "version": "1.1.0",
+  "apiVersion": 1,
+  "name": {
+    "en": "Sunrise",
+    "ru": "Рассвет"
+  },
+  "description": {
+    "en": "A warm light theme with an amber accent and soft beige surfaces",
+    "ru": "Тёплая светлая тема с янтарным акцентом и мягкими бежевыми поверхностями"
+  },
+  "author": "Tinkerbells",
+  "icon": "assets/icon.png",
+  "minAppVersion": "0.7.0",
+  "tags": [
+    "theme"
+  ],
+  "main": null,
+  "client": "./client.mjs"
+}

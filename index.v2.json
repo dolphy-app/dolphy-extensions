@@ -1,15 +1,53 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-08T11:54:36.383Z",
+  "generatedAt": "2026-10-08T14:59:18.793Z",
   "extensions": [
     {
       "id": "theme-catppuccin-frappe",
       "name": "Catppuccin Frappé",
-      "description": "Тёмная тема Catppuccin Frappé: приглушённая серо-синяя основа и голубой акцент",
+      "description": "Dark Catppuccin Frappé theme: a muted gray-blue base with a light blue accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-catppuccin-frappe",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Тёмная тема Catppuccin Frappé: приглушённая серо-синяя основа и голубой акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-catppuccin-frappe/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 3789,
+              "sha256": "a1b87dadc3270f8525a9e8feae77f68fa27363a0bb53d10748363d43c9a48aa1"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3052,
+              "sha256": "3130836d71a4fefbf932c57e536f0781e74192c35a5693d6dfe9e34a60837e3f"
+            },
+            {
+              "path": "client.mjs",
+              "size": 1002,
+              "sha256": "7a6ad674484361739167058c95451312188b80b82f77a106931604696ba89769"
+            },
+            {
+              "path": "extension.json",
+              "size": 527,
+              "sha256": "333a8b0bde3570f47311e1d8ca9d74396f8785a12358b888998747954db5bef5"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -48,11 +86,49 @@
     {
       "id": "theme-catppuccin-latte",
       "name": "Catppuccin Latte",
-      "description": "Светлая тема Catppuccin Latte: тёплая серо-голубая основа и фиолетовый акцент mauve",
+      "description": "Light Catppuccin Latte theme: a warm gray-blue base with a mauve purple accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-catppuccin-latte",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Светлая тема Catppuccin Latte: тёплая серо-голубая основа и фиолетовый акцент mauve"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-catppuccin-latte/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 4704,
+              "sha256": "e3f51b3562029fd6479b6328a62b204d9061f900a0c1b4811e25e14b966e2b44"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 2816,
+              "sha256": "e0a83422ffbe27d0719aac61ee849a69b02735ea2ab75f275ab90fd82d7f7d83"
+            },
+            {
+              "path": "client.mjs",
+              "size": 997,
+              "sha256": "45d179aaf4050228c634e2acf4d19262bd305816003fcbb4fa6f01991eb57e88"
+            },
+            {
+              "path": "extension.json",
+              "size": 528,
+              "sha256": "8a0b6d34600fc093df72735c00f6fc5292a38d5f3d7d4bb36ff74fe7e0e0d649"
+            }
+          ],
+          "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAKx0lEQVR42u1dTWgc5xl+Z3ZGWv05iuofcC6ihZooxpZrFUHBIAXSnJqa9uCjY2hKjz7lVoLJzSffEpqCpaMPLW5uiaEWGAqiCpFNquBCiy4x+KeK7NVK2p2Zner5dmbz7Wh3Nd/s7Lezu+8Dg7Ty7uzs+zzf8/58Y8mgFLG6tjFLRAtEdJ6IpqWDkRyb0vHwIL4r83Mz62md3EiJ9KtEdJnJ1iqKu0S03K4YjDaIfz8gfoH56CpWAiEsaRHA6toGCP+oEfGmadLw8JA4hoZsyuVyZFk5pqgNuK5HnudRuexQqVQWR6VSaSaEG/NzMysdEcDq2sZkQPz16L+NjY3QyEheHIzOY29vXxzF4l6jf74VCGE7NQEEef72Qd6ZlVf7xMQYjY+Piu8Z+gEn2NnZpUKhGHUF1AXX4tQHRkzy7x8oazL8GVb65OQxtvcMpYnt7VfCFSTAARaPEoERo9C7La96EA/LZ2QPSAkQQsQNrrUqEI0jVv7XMvknT06Rbdsc6QzDcRx69mwrKoILzZzAiGP7qOhPnJjiXN9DtcHz51uiczgqHZhNqv3bIfkgncnvLTTgTHAacNtaAEGrNyvbPpPfmyKIcDcbcNs8BQRDnvvh46mpSS74+qAw3NqqGwksysMis8Hqr7V6TH7vIxzSNeK4zgHklg+2cerU8VT6fBQkOHzx1WdGYtm3QYZpCh7SSL+YEzx9+kLuDGqtoSU972r4DSZ87ZLvua6YYfs+kWGQ2BewbZMMw2CGW8D3ffK8ioid53q12OUsK/E5wSU4ffmyIHO9VHOAaM//xhunEisPKnMdRxCP9tG2LXEwkvT0rjjQzkEIlm23xct33z09NBswo6sfOSPpm4B4p+wIxU5MjNLoaJ7JbwOIHWKIWCKmiC1inLQriNR0V+Ui8LJc/CUlH9aVzw+JDSJcMCMdIJaIKWKLGCcVQYRbwbkh2z9UAvtPSj7UCttndA5IB7u7+5TLmSIlqAJpQCoGL5jyjR24kSNJbglXPpPfeSDGoRM0uTGkJSIcL5jBDZyJBYDVjyoznx9mdjQBsUbMk6SCCMfnTflGTtUVjFYP1f7ICJOvG4g5Yg8OVB1EwnSdAFQLN/Sq4b1/DP2FIWIPDlRf11QAKsMfMd3zidu8LreJ4EClFohwPJ14zog3xXCCBdBdAYCDJMVgTRBJX4jZfhrW//ka0d+/IXr8hOjJ99WfnX6d6MxporfPEr03x0QfZeldEQA2djDbT4r7/yK6+bcfSJeBn+HAcz75kujDXxMtvsVkNxaAKTZ7kqKtraakGzt/vEN0fakx+Y3EgOfiNYz0OEhFAEnJh+0nSRUsgvShVQCw9CTkyyLAORjpQWsJj5yfxjlU6oGvvvqGvvjyAX377X8yScCbb/6E3v3lJbp48Wx/CwCrN07Oj1MT4FxxuoM/fXaHHjz4Z6ZXIISJ49Kln9PvP7jSvykArZ7Oc2HlZ518GbhWXHPfCgB9vs5zwfZ7Dd24Zm0CSMP+Vc6V1ZyftWvm//HBbaAeYLyr81yornsN3bhmbQLAbF/nudBa9Rq6cc3aBPD2Wb3nQl+N1qpXgGvtxixA2xwAfTs2dtotBmH/cXcI0Vdf/NlbPAjKggAA7OpdX2r/HCpAYLsVXC4CI8AIt539fbyWt4V7vA38+EoyEeA1H19hwno6BcgiQCHX7IaQaM7nG0L6TABhOsDBt4QNqABka2eSB6gGYLAAGCwABguAwQJgsAAYLADGwMwBHj16TH/56xfR31zJCIDfzPrb37xL586d6T8HAPmf/fkOk98CiA1ihFj1nQCw8hnZi5WpU92M7MVKmwCQ3xjZi5U2AaC4YWQvVtoEgMr2g99dYSc4YuUjRjq7AK1tID6Yzg/HyJADMFgADBYAgwXAYAEwsgPeDGqzbdO9edOzDtCPm0Hd2LzpWQH082ZQL3823gwa8M/Gm0ED/tl4M2jAPxtvBrW58nVv3vR0G8ibQQPsAAwWAIMFwGABMFgADBYAgwXAYAEwWAAMFgCDBcBgATC6gq7+osgnj3z69z1PfC089Qcq8BOnDDp9zqCfvpMTXwdKAP/7r0//+BTEVwZ25UHwj+/hqNDpcyb94g85+tGP9QvB7Ab5n3/oDDT5h52wImKC2PS1AELyyztMehSISTdEoFUAsH0mv7UIEKO+FAAKPbb9eOkAseo7AaDaZ2QvVpZOB9CBM++gorZoaCxley7Cnl1RtfdLrLQ6gK4+vxPkAzgnzt1PsSKeBDK0CQCTLz2dhivsOvUKPUgB/RQrrTUAxp2YfHUayNGP75V7elXqHA1rcwDMvBnZi1VbAvB9X0nVmHkzjoqTqeQAKhykKgCvUiHPU2uJsOExNM4kN+00xqsxUuLBqwgutAugIgSgNrDAbtd7N20WQRPyERvVHUFwUOmGAKA8uI/juIlEwOmg3vaTkI/YgwNVJ452AZtENI0HruuRZeViK88nX1yEbVvKIvjVTYtvCGnzhhAhAPKVnBgcS9isEwBOFFcA4mSOSwYZNDxsUy6XS6B8BMFiC0jkwB6Vy47gQPV1sgDMQADVYUfZiX0irHrHrbrA3l6JGdEMxFw4sOspOXCEYyGAh+GjUin+AAUrHi1IqeQIW9nfZxHoAmKNmCP24EDFfSMcP4QAVpIIwLKsmqVUBVBWchBGMiDGiDViHtp5yEUCAayY83Mz62EaQDuxt7cfr20ZsskwqsVLqVy9oN3dfXaCDq98xFis/nKVSHAALuKljX25ZdwE92Evdld+Ulzk88M/KCsQAdS5s7OrPCNgtC7cENNw5YfkRzmIIwAJd+U5wHL402JxL/ZgAW8eukAogv1SmRzXpUJhV6hVdU7AqG/zEEPEEjFFbGXyEfu4AgCn4FaC4LzG3uraxv2DnLCA7197bYKOHYs3rkNO2tmp33/FhdlWjizbEm0iNIJCJZcz6wTDOAwUdWK8izmLT6LSR6snOq7I3H98fCy2/b96tUMvXxZquX9+bmaRItvBy6EACoUijY6OxJoJ4AKGh4fqigtcaNlxxRESb3oVypk8/Ytl+ZVKMGpvPm5HzOOSj7QBTqOrv84Boi4wMpKn48dfj33RxeKuUhfBSA6QPzY2Gvv5L158L+f/2uqnBnsBN+SCIZIzWgIXhAtjZIt8cBgp/m7ID+oEMD83g5nArfDx9vYrchxHSQTIS5zn0wdiitiqkA/uwKGEWwHH1MwBQoWsh5Xjs2dbStuNyEuTk8dECmEhpEM8YomYxs35Tbhbj67+QzWAVAvMEhHqgcmQ1BMnpshMUMSJDQvXFcUMt4TxgNk+imdM+FRIl8l//nxLnsziDxosBkO/owUgieDrmlWYJp08OUW2bTNDmZ4dOI1c+0Ij8qnVDSHBC65FLUWlMGToBbhpQP61ZuS3dIBm6SBsEZGTVO4dYHQO6PNR7EWq/aa2ryQASQS3iWhWTgkTE2M0Pj6aqDZgtA+sdOwRYMgTWfXrR618JQEEIoADfHSgrOuH278R4Qo4GJ0HVnqLOQ3a+BvzczOx/pKVcp+2uraxEAhh4VBBYZpiUBGOKauVLKeJdu09vP0Lk1YcTdrylYD4FaU2M+mFra5tvE9EVxsJgaEVIHx5fm5mKdGcod13D+oDCOFyeHMpo+PYDPbzl+Pk+Y4KoIEY4AjnAzFMsyhSITs8HgabOetpnfz/T8khKxdc8rkAAAAASUVORK5CYII=",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -91,11 +167,49 @@
     {
       "id": "theme-catppuccin-macchiato",
       "name": "Catppuccin Macchiato",
-      "description": "Тёмная тема Catppuccin Macchiato: глубокая сине-серая основа и розовый акцент",
+      "description": "Dark Catppuccin Macchiato theme: a deep blue-gray base with a pink accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-catppuccin-macchiato",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Тёмная тема Catppuccin Macchiato: глубокая сине-серая основа и розовый акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-catppuccin-macchiato/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 3818,
+              "sha256": "479bfd05953ac799b7b6779920f2daddeeb0dbd97ad30e17a953cce4938a581e"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3015,
+              "sha256": "64673dcd87e938f29dc16d62fe8d7e908ee7381b0c404e5f357623224908d631"
+            },
+            {
+              "path": "client.mjs",
+              "size": 1010,
+              "sha256": "d7b3276fcd9864b8a8c3b28708480bfa13ac559746a3807b60394d53671fa5c1"
+            },
+            {
+              "path": "extension.json",
+              "size": 521,
+              "sha256": "6d04eded9058188a529a79bf1792d9b60a99ff0af422fa732c410c97c8d197dd"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -134,11 +248,49 @@
     {
       "id": "theme-catppuccin-mocha",
       "name": "Catppuccin Mocha",
-      "description": "Самая тёмная тема Catppuccin Mocha: почти чёрная основа и фиолетовый акцент mauve",
+      "description": "The darkest Catppuccin theme, Mocha: a near-black base with a mauve purple accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-catppuccin-mocha",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Самая тёмная тема Catppuccin Mocha: почти чёрная основа и фиолетовый акцент mauve"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-catppuccin-mocha/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 3800,
+              "sha256": "89976d7b824370f07b7feaeed754a78cbaec9070e24d1f88a48b3f03e153e6c4"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3015,
+              "sha256": "29274de86583d6230f473d8b9ad8939200f6caf5002d1789505d5cbfc4ecea1e"
+            },
+            {
+              "path": "client.mjs",
+              "size": 998,
+              "sha256": "f2f8b1921bdd4a3ecaec9d5ff11656cef292957eff353f8a206eccec5bb2d146"
+            },
+            {
+              "path": "extension.json",
+              "size": 527,
+              "sha256": "85242b61a1f47ef3521141db5b67b658a0ccae64d4e5d2fc853e748a33fea461"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -176,12 +328,51 @@
     },
     {
       "id": "theme-forest",
-      "name": "Лес",
-      "description": "Спокойная светлая тема: шалфейный фон и лесной зелёный акцент",
+      "name": "Forest",
+      "description": "A calm light theme: a sage background with a forest green accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-forest",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "name": "Лес",
+          "description": "Спокойная светлая тема: шалфейный фон и лесной зелёный акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-forest/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 2455,
+              "sha256": "b2849781a0c5be10ffc34df35a8b439f379a85bdb3915bb407d6693f64de9693"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3024,
+              "sha256": "0b4c950e27342d4e40f1a1f6d8f1168c077f7f5e05ab697be5a93cc49cef4c2e"
+            },
+            {
+              "path": "client.mjs",
+              "size": 969,
+              "sha256": "2560675ff0214b21e787c0cf1dc5ae6daa91662faf2f70180b670ebc96b9703f"
+            },
+            {
+              "path": "extension.json",
+              "size": 509,
+              "sha256": "8503286f06485f3341630c5535b3a31845e3a6f8a03ddbb8ab3f5b8d84c47d07"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -219,12 +410,51 @@
     },
     {
       "id": "theme-graphite",
-      "name": "Графит",
-      "description": "Строгая тёмная тема: нейтральный графит и приглушённый морской акцент",
+      "name": "Graphite",
+      "description": "A strict dark theme: neutral graphite with a muted sea-blue accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-graphite",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "name": "Графит",
+          "description": "Строгая тёмная тема: нейтральный графит и приглушённый морской акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-graphite/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 2378,
+              "sha256": "6ec20091260eaa9737b5924276c76e21c261587d9915d6443b0c3e290fdce465"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3089,
+              "sha256": "ed3fca0ca77a561971d3d1480526fc879930cd3fd0b0fd3e8ff3cf35a7292da0"
+            },
+            {
+              "path": "client.mjs",
+              "size": 978,
+              "sha256": "f8d1efc1e43cfcdd003b09c4a1be5d416d7d2d75c031d7d145422be0af43503e"
+            },
+            {
+              "path": "extension.json",
+              "size": 537,
+              "sha256": "b7d0cbe432f2127b30d0941de89938cd29010cd6331417963d07023550ae0e0f"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -263,11 +493,49 @@
     {
       "id": "theme-gruvbox-dark",
       "name": "Gruvbox Dark",
-      "description": "Тёмная ретро-тема Gruvbox: тёплая коричнево-серая основа и оранжевый акцент",
+      "description": "The dark retro Gruvbox theme: a warm brown-gray base with an orange accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-gruvbox-dark",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Тёмная ретро-тема Gruvbox: тёплая коричнево-серая основа и оранжевый акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-gruvbox-dark/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 4193,
+              "sha256": "6bd0c2b341cdc222d75bc80db5426265da9c90f6b57d02674ca83c72bcbdae59"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3039,
+              "sha256": "8a2b53002352b50b0c3341bd881ad36f7379706586bcc31a3d263caa60b2c898"
+            },
+            {
+              "path": "client.mjs",
+              "size": 985,
+              "sha256": "c1d65bd30d224b07f09661a48137aaee1d7c2bad446b32421b08958862b29b98"
+            },
+            {
+              "path": "extension.json",
+              "size": 514,
+              "sha256": "3cff0919add7e8499ab67df0e4d7d47beedfe57e5c4c5059fbf1102b6a25e058"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -306,11 +574,49 @@
     {
       "id": "theme-gruvbox-light",
       "name": "Gruvbox Light",
-      "description": "Светлая ретро-тема Gruvbox: кремовая основа и сине-бирюзовый акцент",
+      "description": "The light retro Gruvbox theme: a cream base with a blue-teal accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-gruvbox-light",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Светлая ретро-тема Gruvbox: кремовая основа и сине-бирюзовый акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-gruvbox-light/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 4463,
+              "sha256": "ce8c8c97a5b3042a4f3409bf21f61bc9fd90310fcf77f8d634526e99c8cc8364"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 2939,
+              "sha256": "9df20c2d49bec11597dd5bad4bfb81d6bfdebc6bc65f0ec625767e05c3b2c480"
+            },
+            {
+              "path": "client.mjs",
+              "size": 989,
+              "sha256": "8ef13be489a2ad67323f4fc31a73b29436b090ed3747b590d8712e7ff844c554"
+            },
+            {
+              "path": "extension.json",
+              "size": 494,
+              "sha256": "4129fde93e2b488fb45f9107be23b97955c4c5efbaa8f0e46558358c12f440ec"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -348,12 +654,51 @@
     },
     {
       "id": "theme-lavender",
-      "name": "Лаванда",
-      "description": "Нежная светлая тема: лавандовый фон и фиолетовый акцент",
+      "name": "Lavender",
+      "description": "A gentle light theme: a lavender background with a purple accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-lavender",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "name": "Лаванда",
+          "description": "Нежная светлая тема: лавандовый фон и фиолетовый акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-lavender/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 2380,
+              "sha256": "3b77f5a098ec4d0862aa164b9babc0c95d2125cf98b3f38627a1fa8a07b7e3a0"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3019,
+              "sha256": "f76592d50161d648afd6d2bcda646d7fbbfd2dff1dec976ca800d73d8da1d2d7"
+            },
+            {
+              "path": "client.mjs",
+              "size": 981,
+              "sha256": "2b68f8701764d4017413da308678399ab99f36024a39ce3a87d913ce851eda63"
+            },
+            {
+              "path": "extension.json",
+              "size": 510,
+              "sha256": "a03ee5925fd19e8a4c710e2f7e2f593eee705a4540443bf50fc6d74a2dff2e53"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -391,12 +736,51 @@
     },
     {
       "id": "theme-midnight",
-      "name": "Полночь",
-      "description": "Глубокая тёмная тема: тёмно-синий фон и бирюзово-голубой акцент",
+      "name": "Midnight",
+      "description": "A deep dark theme: a navy background with a teal-cyan accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-midnight",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "name": "Полночь",
+          "description": "Глубокая тёмная тема: тёмно-синий фон и бирюзово-голубой акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-midnight/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 2391,
+              "sha256": "52b7abd1a87feefb3858752782d24028ed559c51fbd306744b7f08198b7c5188"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3051,
+              "sha256": "2ab8193ab60bb79589d870a62737ca3ac80bade7d26a46faec0a889e4e1bce3f"
+            },
+            {
+              "path": "client.mjs",
+              "size": 980,
+              "sha256": "b1c042738404a6a483a58edcccc7054ff519d4ff54712a9c7129409ee0a4ee95"
+            },
+            {
+              "path": "extension.json",
+              "size": 520,
+              "sha256": "7623bfbaf402ea3ca7c28a894d54f75c6eb3d679951fa3c1564e984b18694ad0"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -435,11 +819,49 @@
     {
       "id": "theme-nord",
       "name": "Nord",
-      "description": "Тёмная тема Nord: арктическая сине-серая основа и ледяной голубой акцент",
+      "description": "The dark Nord theme: an arctic blue-gray base with an icy blue accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-nord",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Тёмная тема Nord: арктическая сине-серая основа и ледяной голубой акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-nord/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 4147,
+              "sha256": "62c3e347eaedfcf058752863bcc20ab043ca49f14641058672b4fa56354f1aa1"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 2999,
+              "sha256": "ae58b6a15208b87fab065d1ad09e07112473aac202165cf9cf58925d9bd4fb22"
+            },
+            {
+              "path": "client.mjs",
+              "size": 961,
+              "sha256": "1d6cd39f09b2fcfc4a1923827edecb4fc6b756a4e229dd2c14f2e6d99969088e"
+            },
+            {
+              "path": "extension.json",
+              "size": 490,
+              "sha256": "878001a06e26e3b7eb94b125d4f3c58a22004e64594a643cec1397b3155dcb86"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -478,11 +900,49 @@
     {
       "id": "theme-one-dark",
       "name": "One Dark",
-      "description": "Тёмная тема One Dark из редактора Atom: сине-серая основа и синий акцент",
+      "description": "The dark One Dark theme from the Atom editor: a blue-gray base with a blue accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-one-dark",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Тёмная тема One Dark из редактора Atom: сине-серая основа и синий акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-one-dark/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 4189,
+              "sha256": "de4700fd734a54ee36a1b9fa642ad27cc26221e9789364f8d2be15f145152658"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 2970,
+              "sha256": "e5cbef88ea3787e8d0f453c48651d3fdb189458c2156d16d89a1300105119a81"
+            },
+            {
+              "path": "client.mjs",
+              "size": 973,
+              "sha256": "e1ec2793fb717662c01995ed7d588ab2f5b7518ece147538eb710b08286e15b6"
+            },
+            {
+              "path": "extension.json",
+              "size": 501,
+              "sha256": "11ac1b81976403a7e5fc497bbd4582bd3b2f6cfd4b97eab5ea9ecbab76de3035"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -521,11 +981,49 @@
     {
       "id": "theme-one-light",
       "name": "One Light",
-      "description": "Светлая тема One Light из редактора Atom: почти белая основа и синий акцент",
+      "description": "The light One Light theme from the Atom editor: a near-white base with a blue accent",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-one-light",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "description": "Светлая тема One Light из редактора Atom: почти белая основа и синий акцент"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-one-light/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 4959,
+              "sha256": "67b2d648e0fbc3ee0d8e3a1d747ae6d0f623802045f2cf143a0a1a6fa9c07e07"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 2961,
+              "sha256": "3c9ec8a06771b09c642cc87875f572013379972217acd5eca5eb44ee82bf9af7"
+            },
+            {
+              "path": "client.mjs",
+              "size": 977,
+              "sha256": "c2de5affa225d6073570ed528b4fbc0abce124cdd527d70b258305215475a1cb"
+            },
+            {
+              "path": "extension.json",
+              "size": 511,
+              "sha256": "142dd154ce2e46f6d5385586767d6da170f3e50032a87fcb2296ad082523c330"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -563,12 +1061,51 @@
     },
     {
       "id": "theme-sunrise",
-      "name": "Рассвет",
-      "description": "Тёплая светлая тема с янтарным акцентом и мягкими бежевыми поверхностями",
+      "name": "Sunrise",
+      "description": "A warm light theme with an amber accent and soft beige surfaces",
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/theme-sunrise",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "name": "Рассвет",
+          "description": "Тёплая светлая тема с янтарным акцентом и мягкими бежевыми поверхностями"
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/theme-sunrise/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 1430,
+              "sha256": "8677619d939347242bb3dfa944ff76012ed12baa82205925ed9761677c7fa40b"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 3073,
+              "sha256": "f8f325dde748e04fdf47fbdaa183a3e3e0f9d550e626fedf1ceacaaba9f0505c"
+            },
+            {
+              "path": "client.mjs",
+              "size": 758,
+              "sha256": "d780095fab2a6a8702912ce908527ae916f34bc117a17fd493c50879b90ea10a"
+            },
+            {
+              "path": "extension.json",
+              "size": 540,
+              "sha256": "cb08ae85a8c521b0ec1340813b988b4b66a79342aa8ce4ab0395f6b3b2b4f1b0"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "theme"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -611,7 +1148,52 @@
       "author": "Tinkerbells",
       "source": "https://github.com/dolphy-app/dolphy-extensions/tree/main/extensions/xp-goals",
       "platforms": [],
+      "i18n": {
+        "ru": {
+          "name": "XP и цели",
+          "description": "XP за каждое решённое задание и ежедневная цель по XP."
+        }
+      },
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.7.0",
+          "publishedAt": "2026-10-08T14:59:18.793Z",
+          "baseUrl": "extensions/xp-goals/1.1.0/",
+          "files": [
+            {
+              "path": "README.md",
+              "size": 6043,
+              "sha256": "21c66dd6bbb364dd0b93854cf347f33e1a0aa4e938c55048ab733ce02a95b032"
+            },
+            {
+              "path": "assets/icon.png",
+              "size": 10176,
+              "sha256": "149892c72e083233d8b425afc2360e18ce8a1a4a321b9a1a7bf30251463b3054"
+            },
+            {
+              "path": "client.mjs",
+              "size": 217420,
+              "sha256": "672955ef1d963b3752d700a7e55ec86db7665e7aa70424db4efd02fe05fbc908"
+            },
+            {
+              "path": "extension.json",
+              "size": 604,
+              "sha256": "f5b572a2b2a4a0f63e2926a9a1d11870bd8559eddb152c9d444e381ca2f3c597"
+            },
+            {
+              "path": "main.mjs",
+              "size": 181871,
+              "sha256": "fba161d40007b9e38358afc4d76a433ee22f00083b5e77c211bc571adc3a15cb"
+            }
+          ],
+          "icon": "data:image/png;base64,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",
+          "tags": [
+            "learning",
+            "productivity"
+          ]
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
