@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/@dolphy-app/extension-api/dist/extension.schema.json",
+  "id": "xp-goals",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "name": "XP goals",
+  "description": "Earn XP for every solved exercise and reach a daily goal.",
+  "author": "Tinkerbells",
+  "icon": "assets/icon.png",
+  "minAppVersion": "0.6.0",
+  "tags": ["learning", "productivity"]
+}
