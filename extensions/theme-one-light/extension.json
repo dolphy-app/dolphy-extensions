@@ -1,13 +1,14 @@
 {
   "id": "theme-one-light",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "apiVersion": 1,
   "name": "One Light",
-  "description": "Светлая тема One Light из редактора Atom: почти белая основа и синий акцент",
+  "description": {
+    "en": "The light One Light theme from the Atom editor: a near-white base with a blue accent",
+    "ru": "Светлая тема One Light из редактора Atom: почти белая основа и синий акцент"
+  },
   "author": "Tinkerbells",
   "icon": "assets/icon.png",
-  "minAppVersion": "0.5.0",
-  "tags": [
-    "theme"
-  ]
+  "minAppVersion": "0.7.0",
+  "tags": ["theme"]
 }

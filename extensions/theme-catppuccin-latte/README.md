@@ -5,7 +5,7 @@ A light theme based on the Catppuccin Latte palette: a cool gray-blue base and t
 - Contribution: the theme `theme-catppuccin-latte` (“Settings → Appearance”; listed there as “Catppuccin Latte”).
 - Icon: `assets/icon.png`, a 128×128 miniature of the app drawn from the theme's colors. Regenerate it with `node scripts/theme-icon.mjs extensions/theme-catppuccin-latte` from the repository root.
 - Layout (app 0.5 format): `extension.json` holds the metadata (`minAppVersion` 0.5.0, tag `theme`), `src/theme.json` holds the theme and `src/index.ts` registers it from the `client` export with `addTheme`; `dolphy-ext build` produces `client.mjs`. The theme is plain data, with no server part. The extension runs with the rights of the app, but this one reads no files, uses no network and stores nothing.
-- Versions: 1.0.0 is the first release under the id `theme-catppuccin-latte` (the same theme was published as `dolphy.theme-catppuccin-latte` before; the colors are unchanged). Requires Dolphy 0.5.0 or newer.
+- Versions: 1.0.0 is the first release under the id `theme-catppuccin-latte` (the same theme was published as `dolphy.theme-catppuccin-latte` before; the colors are unchanged). Requires Dolphy 0.5.0 or newer. 1.1.0 adds English and Russian descriptions and needs Dolphy 0.7.0 or newer.
 - Base: a light theme (`dark: false`). Every text color is set explicitly, so contrast does not depend on the Vuetify base theme.
 
 ## Palette source
