@@ -85,6 +85,12 @@ interface Harness {
   host: HTMLElement;
   opened: unknown[][];
   settingsOpened: unknown[][];
+  /** Keys of the app commands the component ran. */
+  commands: string[];
+  /** Arguments of `app.notify`. */
+  notices: unknown[][];
+  /** Set `fails` to make `app.runCommand` reject. */
+  command: { fails: boolean };
   app: { locale: 'en' | 'ru' };
   calls: { count: number };
   emit(event: unknown): void;
@@ -112,12 +118,20 @@ const mount = (
   const listeners = new Set<(event: unknown) => void>();
   const opened: unknown[][] = [];
   const settingsOpened: unknown[][] = [];
+  const commands: string[] = [];
+  const notices: unknown[][] = [];
+  const command = { fails: false };
   const calls = { count: 0 };
   const appApi = reactive({
     locale,
     theme: { id: 'light', dark: false },
     openPanel: (...args: unknown[]) => void opened.push(args),
     openSettings: (...args: unknown[]) => void settingsOpened.push(args),
+    runCommand: async (key: string) => {
+      commands.push(key);
+      if (command.fails) throw new Error('no such command');
+    },
+    notify: (...args: unknown[]) => void notices.push(args),
   });
   const engine = {
     subscribe: (listener: (event: unknown) => void) => {
@@ -147,6 +161,9 @@ const mount = (
     host,
     opened,
     settingsOpened,
+    commands,
+    notices,
+    command,
     app: appApi,
     calls,
     emit: (event) => listeners.forEach((listener) => listener(event)),
@@ -190,8 +207,8 @@ describe(`${ID}: panel`, () => {
     const { host } = mount(StatsPanel, () => status());
     await vi.waitFor(() => expect(has(host, 'xp-today')).toBe(true));
     expect(text(host, 'xp-today-xp')).toBe('12');
-    expect(text(host, 'xp-today')).toContain('/ 30 XP');
-    expect(text(host, 'xp-today')).toContain('18 XP to the daily goal');
+    expect(text(host, 'xp-today')).toContain('of 30 XP');
+    expect(text(host, 'xp-goal-left')).toBe('18 XP to the daily goal');
     expect(text(host, 'xp-league-name')).toBe('Silver league');
     expect(text(host, 'xp-week-xp')).toBe('80 / 150');
     expect(text(host, 'xp-promote')).toBe(
@@ -201,24 +218,75 @@ describe(`${ID}: panel`, () => {
     expect(text(host, 'xp-total')).toBe('412 XP');
     const entries = [...host.querySelectorAll('[data-testid="xp-entry"]')];
     expect(
-      entries.map((e) => e.querySelector('.xp__row-main')?.textContent),
+      entries.map((e) => e.querySelector('.xp__item-main')?.textContent),
     ).toEqual(['+3 XP — grade 5', '+4 XP — perfect session bonus']);
-    expect(
-      host
-        .querySelector('[data-testid="xp-today"] .v-progress-circular')
-        ?.getAttribute('aria-label'),
-    ).toBe('12 of 30 XP today');
   });
 
-  it('marks the reached goal with a check and text, not only with a color', async () => {
+  it('gives the ring the progressbar role with a correct value, range and name', async () => {
+    const { host } = mount(StatsPanel, () => status());
+    await vi.waitFor(() => expect(has(host, 'xp-today')).toBe(true));
+    const ring = host.querySelector(
+      '[data-testid="xp-today"] [role="progressbar"]',
+    );
+    expect(ring?.getAttribute('aria-valuemin')).toBe('0');
+    expect(ring?.getAttribute('aria-valuemax')).toBe('30');
+    expect(ring?.getAttribute('aria-valuenow')).toBe('12');
+    expect(ring?.getAttribute('aria-label')).toBe('12 of 30 XP today');
+  });
+
+  it('shows the week Monday to Sunday: reached, missed, today and days ahead', async () => {
+    const { host } = mount(StatsPanel, () => status());
+    await vi.waitFor(() => expect(has(host, 'xp-week-strip')).toBe(true));
+    const days = [...host.querySelectorAll('[data-testid="xp-week-day"]')];
+    expect(days.map((day) => day.getAttribute('data-state'))).toEqual([
+      'reached',
+      'missed',
+      'today',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+    ]);
+    // every day has a text name: the check is not the only carrier
+    expect(days[0]?.querySelector('.sr')?.textContent).toContain(
+      'goal reached',
+    );
+    expect(days[2]?.getAttribute('title')).toContain('today');
+  });
+
+  it('opens the daily plan with the app command from the main button', async () => {
+    const { host, commands, notices, command } = mount(StatsPanel, () =>
+      status(),
+    );
+    await vi.waitFor(() => expect(has(host, 'xp-start')).toBe(true));
+    host.querySelector<HTMLButtonElement>('[data-testid="xp-start"]')?.click();
+    await settled();
+    expect(commands).toEqual(['app:go:dailyPlan']);
+    expect(notices).toEqual([]);
+
+    command.fails = true;
+    host.querySelector<HTMLButtonElement>('[data-testid="xp-start"]')?.click();
+    await vi.waitFor(() =>
+      expect(notices).toEqual([["Today's plan could not be opened.", 'error']]),
+    );
+  });
+
+  it('marks the reached goal with a trophy, a check and text, not only with a color', async () => {
     const { host } = mount(StatsPanel, () =>
       status({ today: { date: dayKey(0), xp: 35, goal: 30, reached: true } }),
     );
     await vi.waitFor(() => expect(has(host, 'xp-goal-reached')).toBe(true));
     expect(text(host, 'xp-goal-reached')).toBe('Daily goal reached');
-    expect(
-      host.querySelector('[data-testid="xp-goal-reached"] .mdi-check-circle'),
-    ).not.toBeNull();
+    expect(host.querySelector('.hero__headline .mdi-trophy')).not.toBeNull();
+    expect(host.querySelector('.hero__check .mdi-check-bold')).not.toBeNull();
+    expect(has(host, 'xp-goal-left')).toBe(false);
+    expect(host.textContent).toContain('5 XP above the goal');
+    const ring = host.querySelector(
+      '[data-testid="xp-today"] [role="progressbar"]',
+    );
+    // the value never exceeds the maximum
+    expect(ring?.getAttribute('aria-valuenow')).toBe('30');
+    expect(ring?.getAttribute('aria-valuetext')).toBe('35 of 30 XP today');
   });
 
   it('lists 14 days with a text label for each and marks the days that reached the goal', async () => {
@@ -233,11 +301,54 @@ describe(`${ID}: panel`, () => {
     expect(reached.length).toBeGreaterThan(0);
     for (const day of reached) {
       expect(day.getAttribute('title')).toContain('goal reached');
-      expect(day.querySelector('.mdi-check-circle')).not.toBeNull();
+      expect(day.querySelector('.bars__sr')?.textContent).toContain(
+        'goal reached',
+      );
     }
     expect(
       days.every((day) => /: \d+ XP/.test(day.getAttribute('title') ?? '')),
     ).toBe(true);
+    expect(text(host, 'xp-history')).toContain(
+      `Goal reached on ${reached.length} of 14 days`,
+    );
+  });
+
+  it('scales the chart to the goal with headroom, or to the best day when it is higher', async () => {
+    const lineAt = (host: HTMLElement) =>
+      host.querySelector<HTMLElement>('.bars__goal')?.style.bottom;
+    const days = (max: number) =>
+      Array.from({ length: 14 }, (_, i) => ({
+        date: dayKey(i - 13),
+        xp: i === 13 ? max : 5,
+        reached: false,
+      }));
+    const low = mount(StatsPanel, () => status({ history: days(10) }));
+    await vi.waitFor(() => expect(has(low.host, 'xp-history')).toBe(true));
+    // goal 30 with 25% headroom: the scale is 37.5, the goal line is at 80%
+    expect(lineAt(low.host)).toBe('80%');
+
+    const high = mount(StatsPanel, () => status({ history: days(60) }));
+    await vi.waitFor(() => expect(has(high.host, 'xp-history')).toBe(true));
+    expect(lineAt(high.host)).toBe('50%');
+  });
+
+  it('draws a compact chart when only one or two days have XP', async () => {
+    const sparse = (active: number) =>
+      Array.from({ length: 14 }, (_, i) => ({
+        date: dayKey(i - 13),
+        xp: i >= 14 - active ? 4 : 0,
+        reached: false,
+      }));
+    const few = mount(StatsPanel, () => status({ history: sparse(2) }));
+    await vi.waitFor(() => expect(has(few.host, 'xp-history')).toBe(true));
+    expect(few.host.querySelector('.bars--compact')).not.toBeNull();
+    expect(few.host.querySelectorAll('[data-testid="xp-day"]')).toHaveLength(
+      14,
+    );
+
+    const more = mount(StatsPanel, () => status({ history: sparse(3) }));
+    await vi.waitFor(() => expect(has(more.host, 'xp-history')).toBe(true));
+    expect(more.host.querySelector('.bars--compact')).toBeNull();
   });
 
   it('shows the completed weeks with the result as an icon and as text', async () => {
@@ -332,13 +443,130 @@ describe(`${ID}: panel`, () => {
     expect(has(host, 'xp-week-xp')).toBe(false);
   });
 
-  it('invites to practice when there is no XP yet', async () => {
-    const { host } = mount(StatsPanel, () => status(EMPTY));
-    await vi.waitFor(() => expect(has(host, 'xp-empty')).toBe(true));
-    expect(text(host, 'xp-empty')).toBe(
+  it('draws the ladder of seven leagues: passed, current, ahead', async () => {
+    const { host } = mount(StatsPanel, () => status());
+    await vi.waitFor(() => expect(has(host, 'xp-league')).toBe(true));
+    const steps = [...host.querySelectorAll('[data-testid="xp-step"]')];
+    expect(steps).toHaveLength(7);
+    expect(
+      steps.map((step) =>
+        ['done', 'current', 'ahead'].find((state) =>
+          step.classList.contains(`ribbon__step--${state}`),
+        ),
+      ),
+    ).toEqual(['done', 'current', 'ahead', 'ahead', 'ahead', 'ahead', 'ahead']);
+    // the name is text, the colour only helps
+    expect(steps[1]?.querySelector('.sr')?.textContent).toBe(
+      'Silver league: current',
+    );
+    expect(steps[0]?.getAttribute('title')).toBe('Bronze league: passed');
+  });
+
+  it('marks keeping and promotion on the week bar; no keep mark where a league cannot be lost, no promotion in the top one', async () => {
+    const mid = mount(StatsPanel, () => status());
+    await vi.waitFor(() => expect(has(mid.host, 'xp-league')).toBe(true));
+    expect(text(mid.host, 'xp-mark-keep')).toBe('Keep · 60');
+    expect(text(mid.host, 'xp-mark-promote')).toBe('Promotion · 150');
+
+    const bronze = mount(StatsPanel, () =>
+      status({
+        league: {
+          tier: 'bronze',
+          index: 0,
+          next: 'silver',
+          previous: null,
+          toPromote: 70,
+          atRisk: false,
+        },
+      }),
+    );
+    await vi.waitFor(() => expect(has(bronze.host, 'xp-league')).toBe(true));
+    expect(has(bronze.host, 'xp-mark-keep')).toBe(false);
+    expect(has(bronze.host, 'xp-kept')).toBe(false);
+
+    const top = mount(StatsPanel, () =>
+      status({
+        league: {
+          tier: 'diamond',
+          index: 6,
+          next: null,
+          previous: 'emerald',
+          toPromote: 0,
+          atRisk: false,
+        },
+      }),
+    );
+    await vi.waitFor(() => expect(has(top.host, 'xp-league')).toBe(true));
+    expect(has(top.host, 'xp-mark-promote')).toBe(false);
+    expect(has(top.host, 'xp-mark-keep')).toBe(true);
+  });
+
+  it('says the league is kept once the week has enough XP, and stays neutral before that', async () => {
+    const kept = mount(StatsPanel, () => status());
+    await vi.waitFor(() => expect(has(kept.host, 'xp-league')).toBe(true));
+    expect(text(kept.host, 'xp-kept')).toBe('League kept: enough XP earned');
+
+    const early = mount(StatsPanel, () =>
+      status({
+        week: {
+          start: dayKey(-2),
+          xp: 20,
+          promoteAt: 150,
+          keepAt: 60,
+          daysLeft: 5,
+        },
+      }),
+    );
+    await vi.waitFor(() => expect(has(early.host, 'xp-league')).toBe(true));
+    expect(has(early.host, 'xp-kept')).toBe(false);
+    expect(has(early.host, 'xp-at-risk')).toBe(false);
+  });
+
+  it('hints at the first results on the first week and drops the hint once a week is closed', async () => {
+    const first = mount(StatsPanel, () => status({ weeks: [] }));
+    await vi.waitFor(() => expect(has(first.host, 'xp-league')).toBe(true));
+    expect(text(first.host, 'xp-first-week')).toBe(
+      'Results of your first week appear on Monday',
+    );
+    expect(has(first.host, 'xp-weeks')).toBe(false);
+
+    const later = mount(StatsPanel, () => status());
+    await vi.waitFor(() => expect(has(later.host, 'xp-league')).toBe(true));
+    expect(has(later.host, 'xp-first-week')).toBe(false);
+  });
+
+  it('draws no list card without entries', async () => {
+    const none = mount(StatsPanel, () => status({ weeks: [], recent: [] }));
+    await vi.waitFor(() => expect(has(none.host, 'xp-league')).toBe(true));
+    expect(has(none.host, 'xp-weeks')).toBe(false);
+    expect(has(none.host, 'xp-recent')).toBe(false);
+    expect(none.host.querySelector('.xp__row--lists')).toBeNull();
+
+    const one = mount(StatsPanel, () => status({ weeks: [] }));
+    await vi.waitFor(() => expect(has(one.host, 'xp-recent')).toBe(true));
+    expect(has(one.host, 'xp-weeks')).toBe(false);
+  });
+
+  it('shows a friendly first screen when there is no XP yet: no empty chart, no empty lists', async () => {
+    const { host, commands } = mount(StatsPanel, () => status(EMPTY));
+    await vi.waitFor(() => expect(has(host, 'xp-hero')).toBe(true));
+    expect(text(host, 'xp-hero')).toContain(
       'Finish a practice session to earn your first XP.',
     );
     expect(text(host, 'xp-today-xp')).toBe('0');
+    expect(text(host, 'xp-goal-left')).toBe('30 XP to the daily goal');
+    expect(has(host, 'xp-history')).toBe(false);
+    expect(has(host, 'xp-weeks')).toBe(false);
+    expect(has(host, 'xp-recent')).toBe(false);
+    expect(text(host, 'xp-history-empty')).toContain(
+      'Your activity will appear here',
+    );
+    host
+      .querySelector<HTMLButtonElement>(
+        '[data-testid="xp-history-empty"] button',
+      )
+      ?.click();
+    expect(commands).toEqual(['app:go:dailyPlan']);
   });
 
   it('says the extension is off and still shows what was earned', async () => {
@@ -347,7 +575,7 @@ describe(`${ID}: panel`, () => {
     );
     await vi.waitFor(() => expect(has(host, 'xp-disabled')).toBe(true));
     expect(text(host, 'xp-disabled')).toContain('switched off in the settings');
-    expect(has(host, 'xp-empty')).toBe(false);
+    expect(has(host, 'xp-history-empty')).toBe(false);
     expect(text(host, 'xp-total')).toBe('412 XP');
     host
       .querySelector<HTMLButtonElement>('[data-testid="xp-disabled"] button')
@@ -376,7 +604,7 @@ describe(`${ID}: panel`, () => {
     expect(calls.count).toBe(2);
   });
 
-  it('shows the indeterminate progress bar while the first answer is awaited', async () => {
+  it('shows a placeholder while the first answer is awaited and the thin bar on later loads', async () => {
     let release: (value: GamificationStatus) => void = () => undefined;
     const pending = new Promise<GamificationStatus>((resolve) => {
       release = resolve;
@@ -384,28 +612,40 @@ describe(`${ID}: panel`, () => {
     const { host } = mount(StatsPanel, () => pending);
     await nextTick();
     expect(
-      host.querySelector('[role="progressbar"][aria-label="Loading"]'),
-    ).not.toBeNull();
+      host
+        .querySelector('[data-testid="xp-loading"]')
+        ?.getAttribute('aria-label'),
+    ).toBe('Loading');
+    expect(has(host, 'xp-hero')).toBe(false);
     release(status());
-    await vi.waitFor(() => expect(has(host, 'xp-today')).toBe(true));
+    await vi.waitFor(() => expect(has(host, 'xp-hero')).toBe(true));
+    expect(has(host, 'xp-loading')).toBe(false);
+
+    host
+      .querySelector<HTMLButtonElement>('[data-testid="xp-refresh"]')
+      ?.click();
+    await nextTick();
     expect(
       host.querySelector('[role="progressbar"][aria-label="Loading"]'),
-    ).toBeNull();
+    ).not.toBeNull();
+    expect(has(host, 'xp-hero')).toBe(true);
   });
 
   it('speaks Russian and follows a change of the language', async () => {
     const { host, app } = mount(StatsPanel, () => status(), 'ru');
     await vi.waitFor(() => expect(has(host, 'xp-today')).toBe(true));
-    expect(text(host, 'xp-today')).toContain('XP сегодня');
-    expect(text(host, 'xp-today')).toContain('Ещё 18 XP до цели дня');
+    expect(text(host, 'xp-today')).toContain('из 30 XP');
+    expect(text(host, 'xp-goal-left')).toBe('Ещё 18 XP до цели дня');
     expect(text(host, 'xp-league-name')).toBe('Серебряная лига');
     expect(text(host, 'xp-promote')).toBe(
       'Ещё 70 XP до повышения: Золотая лига',
     );
     expect(text(host, 'xp-streak')).toBe('4 дня');
     expect(host.textContent).toContain('До конца недели 5 дней');
+    expect(text(host, 'xp-mark-keep')).toBe('Сохранить · 60');
+    expect(text(host, 'xp-mark-promote')).toBe('Повышение · 150');
     const entries = [
-      ...host.querySelectorAll('[data-testid="xp-entry"] .xp__row-main'),
+      ...host.querySelectorAll('[data-testid="xp-entry"] .xp__item-main'),
     ];
     expect(entries.map((e) => e.textContent)).toEqual([
       '+3 XP — оценка 5',
@@ -414,10 +654,12 @@ describe(`${ID}: panel`, () => {
     expect(
       host.querySelector('ul[aria-label="Последние 14 дней"]'),
     ).not.toBeNull();
+    expect(host.querySelector('ol[aria-label="Эта неделя"]')).not.toBeNull();
 
     app.locale = 'en';
     await nextTick();
     expect(text(host, 'xp-league-name')).toBe('Silver league');
+    expect(text(host, 'xp-mark-keep')).toBe('Keep · 60');
   });
 
   it('formats numbers for the language', async () => {
@@ -525,6 +767,19 @@ describe(`${ID}: plan card`, () => {
     await vi.waitFor(() => expect(has(host, 'xp-plan-card')).toBe(true));
     expect(host.textContent).toContain('Daily goal reached');
     expect(host.querySelector('.mdi-check-circle')).not.toBeNull();
+  });
+
+  it('shows the week as seven days with a spoken name for each', async () => {
+    const { host } = mount(PlanCard, () => status());
+    await vi.waitFor(() => expect(has(host, 'xp-plan-card')).toBe(true));
+    const days = [...host.querySelectorAll('.plan-card__day')];
+    expect(days).toHaveLength(7);
+    expect(days[0]?.querySelector('.sr')?.textContent).toContain(
+      'goal reached',
+    );
+    expect(days[2]?.querySelector('.sr')?.textContent).toContain('today');
+    expect(days[6]?.querySelector('.sr')?.textContent).toContain('ahead');
+    expect(host.querySelector('ol[aria-label="This week"]')).not.toBeNull();
   });
 
   it('leaves the league out when leagues are off', async () => {

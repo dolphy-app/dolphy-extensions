@@ -9,11 +9,16 @@ const props = defineProps<{
   f: Format;
 }>();
 
-// the goal line is always inside the chart
+/** Scale: the goal line always fits with room above it. */
 const scale = computed(() =>
-  Math.max(props.goal, ...props.days.map((day) => day.xp), 1),
+  Math.max(props.goal * 1.25, ...props.days.map((day) => day.xp), 1),
 );
 const percent = (xp: number) => `${(xp / scale.value) * 100}%`;
+
+// one or two active days: a compact chart, not a field of empty space
+const compact = computed(
+  () => props.days.filter((day) => day.xp > 0).length <= 2,
+);
 
 const labelOf = (day: DayXp) =>
   `${props.f.t('historyDay', {
@@ -23,108 +28,168 @@ const labelOf = (day: DayXp) =>
 </script>
 
 <template>
-  <div class="bars">
-    <div class="bars__plot">
-      <div class="bars__area" aria-hidden="true">
-        <div class="bars__goal" :style="{ bottom: percent(goal) }">
-          <span class="bars__goal-label">{{ f.t('goalLine') }}</span>
+  <div class="bars-host">
+    <div class="bars" :class="{ 'bars--compact': compact }">
+      <div class="bars__plot">
+        <div class="bars__area" aria-hidden="true">
+          <div class="bars__goal" :style="{ bottom: percent(goal) }">
+            <span class="bars__goal-label"
+              >{{ f.t('goalLine') }} {{ f.number(goal) }}</span
+            >
+          </div>
         </div>
+        <ul class="bars__list" :aria-label="f.t('history')">
+          <li
+            v-for="(day, index) in days"
+            :key="day.date"
+            class="bars__item"
+            :class="{ 'bars__item--today': index === days.length - 1 }"
+            :style="{ '--p': percent(day.xp), '--i': index }"
+            :title="labelOf(day)"
+            data-testid="xp-day"
+            :data-reached="day.reached"
+          >
+            <span class="bars__sr">{{ labelOf(day) }}</span>
+            <span
+              v-if="day.xp > 0"
+              class="bars__value"
+              :class="{ 'bars__value--reached': day.reached }"
+              aria-hidden="true"
+              >{{ f.number(day.xp) }}</span
+            >
+            <span
+              class="bars__bar"
+              :class="{
+                'bars__bar--reached': day.reached,
+                'bars__bar--zero': day.xp === 0,
+              }"
+              aria-hidden="true"
+            />
+          </li>
+        </ul>
       </div>
-      <ul class="bars__list" :aria-label="f.t('history')">
-        <li
-          v-for="day in days"
+      <div class="bars__days" aria-hidden="true">
+        <span
+          v-for="(day, index) in days"
           :key="day.date"
-          class="bars__item"
-          :title="labelOf(day)"
-          data-testid="xp-day"
-          :data-reached="day.reached"
+          class="bars__day"
+          :class="{ 'bars__day--today': index === days.length - 1 }"
         >
-          <span class="bars__sr">{{ labelOf(day) }}</span>
-          <v-icon
-            v-if="day.reached"
-            class="bars__check"
-            icon="mdi-check-circle"
-            size="16"
-            aria-hidden="true"
-          />
-          <span
-            class="bars__bar"
-            :class="{ 'bars__bar--reached': day.reached }"
-            :style="{ height: percent(day.xp) }"
-            aria-hidden="true"
-          />
-        </li>
-      </ul>
-    </div>
-    <div class="bars__days" aria-hidden="true">
-      <span v-for="day in days" :key="day.date" class="bars__day">{{
-        f.dayOnly(day.date)
-      }}</span>
+          <span class="bars__weekday">{{ f.weekdayShort(day.date) }}</span>
+          <span class="bars__date">{{ f.dayOnly(day.date) }}</span>
+        </span>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.bars-host {
+  container-type: inline-size;
+}
+
+.bars {
+  --xp-plot-height: 128px;
+  --xp-gutter: 72px;
+  container-type: normal;
+}
+
+.bars--compact {
+  --xp-plot-height: 96px;
+}
+
 .bars__plot {
   position: relative;
-  height: 140px;
+  height: calc(var(--xp-plot-height) + 20px);
   padding-top: 20px;
 }
 
 .bars__list {
+  position: relative;
   display: flex;
-  gap: 4px;
+  gap: 6px;
   height: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 var(--xp-gutter) 0 0;
   list-style: none;
 }
 
 .bars__item {
   position: relative;
-  display: flex;
   flex: 1 1 0;
-  align-items: flex-end;
-  justify-content: center;
   min-width: 0;
+  border-radius: 8px;
+}
+
+.bars__item--today {
+  background: rgba(var(--v-theme-primary), 0.1);
 }
 
 .bars__bar {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  max-width: 28px;
-  min-height: 3px;
-  border-radius: 4px 4px 0 0;
-  background: rgb(var(--v-theme-primary));
-  opacity: 0.55;
+  max-width: 32px;
+  height: max(4px, var(--p));
+  margin: 0 auto;
+  border-radius: 6px 6px 2px 2px;
+  background: rgba(var(--v-theme-primary), 0.5);
+  transform-origin: bottom;
+  animation: grow 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 18ms);
 }
 
 .bars__bar--reached {
-  background: rgb(var(--v-theme-success));
-  opacity: 1;
+  background: rgb(var(--v-theme-primary));
 }
 
-.bars__check {
+.bars__bar--zero {
+  background: rgba(var(--v-theme-on-surface), 0.24);
+}
+
+.bars__value {
   position: absolute;
-  top: -18px;
-  color: rgb(var(--v-theme-success));
+  right: 0;
+  bottom: calc(max(4px, var(--p)) + 4px);
+  left: 0;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  text-align: center;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+
+.bars__value--reached {
+  font-weight: 700;
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .bars__days {
   display: flex;
-  gap: 4px;
-  margin-top: 4px;
+  gap: 6px;
+  margin-top: 8px;
+  padding-right: var(--xp-gutter);
 }
 
 .bars__day {
+  display: flex;
   flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
   min-width: 0;
   font-size: 0.75rem;
-  text-align: center;
-  color: rgb(var(--v-theme-on-surface));
-  opacity: var(--v-medium-emphasis-opacity);
+  line-height: 1.3;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
-/* the same box as the columns: the top 20px of the plot hold the check marks */
+.bars__day--today {
+  font-weight: 700;
+  color: rgb(var(--v-theme-on-surface));
+}
+
+/* the area is the same box as the columns: the top 20px of the plot hold the values */
 .bars__area {
   position: absolute;
   inset: 20px 0 0;
@@ -136,16 +201,19 @@ const labelOf = (day: DayXp) =>
   right: 0;
   left: 0;
   z-index: 1;
-  border-top: 1px dashed rgb(var(--v-theme-on-surface));
+  border-top: 1px dashed rgba(var(--v-theme-on-surface), 0.55);
 }
 
+/* the label sits in the gutter right of the columns, never over a value */
 .bars__goal-label {
   position: absolute;
   right: 0;
-  bottom: 0;
-  padding: 0 4px;
+  bottom: 3px;
+  width: var(--xp-gutter);
+  padding-left: 8px;
   font-size: 0.75rem;
-  background: rgb(var(--v-theme-surface));
+  white-space: nowrap;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
 .bars__sr {
@@ -155,5 +223,35 @@ const labelOf = (day: DayXp) =>
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* narrow card: every second date, the last day (today) always stays */
+@container (max-width: 560px) {
+  .bars {
+    --xp-gutter: 56px;
+  }
+
+  .bars__day:nth-child(odd) {
+    visibility: hidden;
+  }
+
+  .bars__weekday {
+    display: none;
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bars__bar {
+    animation: none;
+  }
 }
 </style>

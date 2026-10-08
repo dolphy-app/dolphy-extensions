@@ -59,21 +59,43 @@ Settings → Extensions → "XP goals" (group "XP and leagues"):
 
 ## What you see
 
-- **Panel "XP goals"** (sidebar): a ring with today's XP against the daily goal
-  (a check mark and the words "Daily goal reached" once it is met), the league
-  card (league and its number, the week's XP against the XP needed for
-  promotion, "N XP more to be promoted", a warning when the league is at risk
-  of demotion in the last two days of the week, days left in the week), the
-  streak and total XP, the last 14 days as bars (days that met the goal are
-  marked), up to 8 completed weeks with promotion / demotion / no change, and
-  the last XP entries ("+3 XP — grade 5", "+4 XP — perfect session bonus").
-- **Card in "Today's plan"**: a small ring, the league and the streak; the
-  button opens the panel. The card is hidden while the extension is switched
-  off.
-- With no XP yet the panel asks you to finish a practice session. With leagues
-  switched off it says so instead of the league progress. With the extension
-  off it shows what was earned and a button to the settings. If the status
-  cannot be loaded, an error with "Refresh" is shown.
+- **Panel "XP goals"** (sidebar), top to bottom:
+  1. **Today**, on the accent gradient of the plan page: a large ring with
+     today's XP against the daily goal (it fills when the panel opens and
+     follows changes), "N XP to the daily goal" or, once it is met, a trophy, a
+     check and "Daily goal reached" (the ring turns green; no confetti), the
+     "Start practice" button (it runs the app command `app:go:dailyPlan` and
+     opens Today's plan), the streak with its record, and the week Monday to
+     Sunday as seven circles: reached (check), missed, today (outlined) and days
+     ahead (empty).
+  2. **League**: a badge with the league's own color, its name and number, the
+     ladder of all seven leagues (passed, current, ahead), the week's XP as a
+     bar with marks for keeping the league and for promotion, and one line:
+     "N XP more to be promoted", "League kept: enough XP earned", or, in the
+     last two days of the week, a warning with what is missing to keep the
+     league. The first week adds "Results of your first week appear on Monday".
+     **Total** sits next to it: total XP and perfect sessions.
+  3. **Last 14 days**: bars on a scale of the goal plus 25% (or the best day),
+     the goal line, the XP above each bar, the days that met the goal in the
+     accent color and today highlighted. With only one or two active days the
+     chart is compact; with none, a friendly empty card replaces it.
+  4. **Weekly results** (up to 8 weeks) and **Recent XP** ("+3 XP — grade 5").
+     A block without entries is not drawn, and the grid closes the gap.
+- **Card in "Today's plan"** (the page has one extension anchor, below the
+  other blocks, so the card stays there): a ring, "N of 30 XP today", the
+  league and streak chips, the week as seven small circles and "Details" which
+  opens the panel. It is hidden while the extension is switched off.
+- The league colors (bronze, silver, gold, sapphire, ruby, emerald, diamond)
+  are CSS variables defined once in `LeagueBadge.vue`, with a variant for the
+  light and the dark theme; the icon on a badge has at least 4.5:1 contrast and
+  the name is always written out. They color only the league; XP use the
+  primary color of the app.
+- Animations (the ring filling, the bars growing, the checks appearing) take
+  200–400 ms and are switched off by `prefers-reduced-motion`.
+- While the first status loads, placeholders keep the layout; with leagues
+  switched off a short card says so; with the extension off the panel shows what
+  was earned and a button to the settings; if the status cannot be loaded, an
+  error is shown and "Refresh" tries again.
 - Text follows the language of the app (English or Russian), colors follow the
   light and dark theme.
 
@@ -94,17 +116,22 @@ Settings → Extensions → "XP goals" (group "XP and leagues"):
 
 ## Structure
 
-- `src/core/` — pure logic (`xp.ts`, `dates.ts`); the time is an argument.
+- `src/core/` — pure logic (`xp.ts`, `dates.ts`, `week.ts`); the time is an
+  argument.
 - `src/server.ts` — settings, event handlers run through one promise chain, and
   the `xpgoals.status` call (the RPC name pattern forbids a hyphen in its first
   segment).
 - `src/shared/` — `types.ts` and `rpc.ts` (zod schema of the status) shared with
   the client.
 - `src/client.ts` — registers the panel and the plan card.
-- `src/StatsPanel.vue`, `src/DayBars.vue`, `src/PlanCard.vue` — the user
-  interface (Vuetify components, theme tokens only); `src/useGamification.ts`
-  loads and refreshes the status; `src/i18n.ts` holds every visible string in
-  English and Russian.
+- `src/StatsPanel.vue` lays out the panel from `src/TodayHero.vue`,
+  `src/LeagueCard.vue` and `src/DayBars.vue`; `src/PlanCard.vue` is the card of
+  the plan page. Shared: `src/XpRing.vue` (the progress ring),
+  `src/LeagueBadge.vue` (the badge and the league color tokens),
+  `src/NoticeBox.vue` and `src/dayLabel.ts` (the spoken name of a day). The
+  interface uses Vuetify components and theme tokens only;
+  `src/useGamification.ts` loads and refreshes the status; `src/i18n.ts` holds
+  every visible string in English and Russian.
 
 ```sh
 npm test

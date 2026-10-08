@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { weekDays } from '../src/core/week.ts';
 import {
   applyAttempt,
   effortMinutes,
@@ -247,5 +248,62 @@ describe('status', () => {
       statusOf(state, at(2026, 10, 11), { ...settings, leagues: false }, streak)
         .league.atRisk,
     ).toBe(false);
+  });
+});
+
+describe('week strip', () => {
+  const stateWith = (days: Record<string, number>) =>
+    statusOf(withDays(days), at(2026, 10, 7), settings, streak);
+
+  it('lists Monday to Sunday: reached and missed days, today, days ahead', () => {
+    // Wednesday 2026-10-07: Monday reached, Tuesday missed, today in progress
+    const week = weekDays(stateWith({ '2026-10-05': 31, '2026-10-07': 5 }));
+    expect(week.map((day) => day.date)).toEqual([
+      '2026-10-05',
+      '2026-10-06',
+      '2026-10-07',
+      '2026-10-08',
+      '2026-10-09',
+      '2026-10-10',
+      '2026-10-11',
+    ]);
+    expect(week.map((day) => day.state)).toEqual([
+      'reached',
+      'missed',
+      'today',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+    ]);
+    expect(week.map((day) => day.xp)).toEqual([31, 0, 5, 0, 0, 0, 0]);
+    expect(week.filter((day) => day.isToday)).toHaveLength(1);
+  });
+
+  it('counts today as reached once its goal is done', () => {
+    const week = weekDays(stateWith({ '2026-10-07': 30 }));
+    expect(week[2]).toMatchObject({ state: 'reached', isToday: true });
+  });
+
+  it('starts on Monday also when today is Monday or Sunday', () => {
+    const monday = statusOf(withDays({}), at(2026, 10, 5), settings, streak);
+    expect(weekDays(monday).map((day) => day.state)).toEqual([
+      'today',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+    ]);
+    const sunday = statusOf(
+      withDays({ '2026-10-10': 40 }),
+      at(2026, 10, 11),
+      settings,
+      streak,
+    );
+    const states = weekDays(sunday).map((day) => day.state);
+    expect(states[5]).toBe('reached');
+    expect(states[6]).toBe('today');
   });
 });

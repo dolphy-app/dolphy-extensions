@@ -20,29 +20,67 @@ export const MESSAGES = {
     ru: 'Расширение выключено в настройках. Новые XP не начисляются; накопленное показано ниже.',
   },
   openSettings: { en: 'Open settings', ru: 'Открыть настройки' },
+  startPractice: { en: 'Start practice', ru: 'Начать занятие' },
+  toPlan: { en: "Open today's plan", ru: 'К плану на сегодня' },
+  commandFailed: {
+    en: "Today's plan could not be opened.",
+    ru: 'Не удалось открыть план на сегодня.',
+  },
+  today: { en: 'Today', ru: 'Сегодня' },
   empty: {
     en: 'Finish a practice session to earn your first XP.',
     ru: 'Пройдите занятие, чтобы получить первые XP.',
   },
-  xpToday: { en: 'XP today', ru: 'XP сегодня' },
-  xpUnit: { en: 'XP', ru: 'XP' },
   ringLabel: {
     en: '{xp} of {goal} XP today',
     ru: '{xp} из {goal} XP сегодня',
   },
-  goalReached: { en: 'Daily goal reached', ru: 'Цель достигнута' },
+  ringGoal: { en: 'of {goal} XP', ru: 'из {goal} XP' },
+  goalReached: { en: 'Daily goal reached', ru: 'Цель дня выполнена' },
   goalLeft: {
     en: '{n} XP to the daily goal',
     ru: 'Ещё {n} XP до цели дня',
   },
-  dailyGoal: { en: 'Daily goal: {goal} XP', ru: 'Цель дня: {goal} XP' },
+  goalOver: {
+    en: '{n} XP above the goal. Well done!',
+    ru: 'На {n} XP больше цели. Отличная работа!',
+  },
+  goalExact: {
+    en: 'Come back tomorrow to keep your streak.',
+    ru: 'Возвращайтесь завтра, чтобы продолжить серию.',
+  },
+  thisWeek: { en: 'This week', ru: 'Эта неделя' },
+  dayToday: { en: 'today', ru: 'сегодня' },
+  dayUpcoming: { en: 'ahead', ru: 'впереди' },
+  dayMissed: { en: 'goal not reached', ru: 'цель не выполнена' },
+  streak: { en: 'Streak', ru: 'Серия' },
+  streakNone: {
+    en: 'Practice today to start a streak',
+    ru: 'Позанимайтесь сегодня, чтобы начать серию',
+  },
+  streakDays: {
+    en: { one: '{n} day', other: '{n} days' },
+    ru: {
+      one: '{n} день',
+      few: '{n} дня',
+      many: '{n} дней',
+      other: '{n} дня',
+    },
+  },
+  bestStreak: { en: 'Best: {n}', ru: 'Рекорд: {n}' },
   league: { en: 'League', ru: 'Лига' },
   leagueOf: { en: 'League {n} of {total}', ru: 'Лига {n} из {total}' },
+  leagueSteps: { en: 'All leagues', ru: 'Все лиги' },
+  stepDone: { en: 'passed', ru: 'пройдена' },
+  stepCurrent: { en: 'current', ru: 'текущая' },
+  stepAhead: { en: 'ahead', ru: 'впереди' },
   leaguesOff: {
     en: 'Leagues are switched off in the settings.',
     ru: 'Лиги отключены в настройках.',
   },
   weekProgress: { en: 'XP this week', ru: 'XP за неделю' },
+  keepMark: { en: 'Keep · {n}', ru: 'Сохранить · {n}' },
+  promoteMark: { en: 'Promotion · {n}', ru: 'Повышение · {n}' },
   toPromote: {
     en: '{n} XP more to be promoted to {tier}',
     ru: 'Ещё {n} XP до повышения: {tier}',
@@ -55,9 +93,13 @@ export const MESSAGES = {
     en: 'You are in the top league',
     ru: 'Вы в высшей лиге',
   },
+  keepSafe: {
+    en: 'League kept: enough XP earned',
+    ru: 'Лига сохранена: набрано достаточно',
+  },
   atRisk: {
     en: 'At risk: earn {n} XP more to stay in {tier}',
-    ru: 'Под угрозой: наберите ещё {n} XP, чтобы остаться в лиге «{tier}»',
+    ru: 'Под угрозой: нужно ещё {n} XP до сохранения лиги «{tier}»',
   },
   daysLeft: {
     en: { one: '{n} day left in the week', other: '{n} days left in the week' },
@@ -68,33 +110,11 @@ export const MESSAGES = {
       other: 'До конца недели {n} дня',
     },
   },
-  history: { en: 'Last 14 days', ru: 'Последние 14 дней' },
-  historyDay: {
-    en: '{date}: {xp} XP',
-    ru: '{date}: {xp} XP',
+  weeksFirstHint: {
+    en: 'Results of your first week appear on Monday',
+    ru: 'Итоги первой недели появятся в понедельник',
   },
-  historyReached: { en: 'goal reached', ru: 'цель достигнута' },
-  goalLine: { en: 'Goal', ru: 'Цель' },
-  weeks: { en: 'Weekly results', ru: 'Итоги недель' },
-  weeksEmpty: {
-    en: 'Completed weeks will appear here.',
-    ru: 'Здесь появятся завершённые недели.',
-  },
-  weekOf: { en: 'Week of {date}', ru: 'Неделя с {date}' },
-  promoted: { en: 'Promoted', ru: 'Повышение' },
-  demoted: { en: 'Demoted', ru: 'Понижение' },
-  kept: { en: 'No change', ru: 'Без изменений' },
-  streakAndTotal: { en: 'Streak and total', ru: 'Серия и итог' },
-  streakDays: {
-    en: { one: '{n} day', other: '{n} days' },
-    ru: {
-      one: '{n} день',
-      few: '{n} дня',
-      many: '{n} дней',
-      other: '{n} дня',
-    },
-  },
-  bestStreak: { en: 'Best: {n}', ru: 'Рекорд: {n}' },
+  totals: { en: 'Total', ru: 'Итого' },
   totalXp: { en: 'Total XP', ru: 'Всего XP' },
   perfectSessions: {
     en: { one: '{n} perfect session', other: '{n} perfect sessions' },
@@ -105,11 +125,31 @@ export const MESSAGES = {
       other: '{n} идеальной сессии',
     },
   },
-  recent: { en: 'Recent XP', ru: 'Последние начисления' },
-  recentEmpty: {
-    en: 'Earned XP will be listed here.',
-    ru: 'Здесь появятся начисленные XP.',
+  history: { en: 'Last 14 days', ru: 'Последние 14 дней' },
+  historyDay: {
+    en: '{date}: {xp} XP',
+    ru: '{date}: {xp} XP',
   },
+  historyReached: { en: 'goal reached', ru: 'цель достигнута' },
+  historyReachedCount: {
+    en: 'Goal reached on {n} of 14 days',
+    ru: 'Цель выполнена: {n} из 14 дней',
+  },
+  historyEmptyTitle: {
+    en: 'Your activity will appear here',
+    ru: 'Здесь появится ваша активность',
+  },
+  historyEmptyText: {
+    en: 'Finish a practice session: the chart fills in as you earn XP.',
+    ru: 'Пройдите занятие: график заполнится по мере того, как вы получаете XP.',
+  },
+  goalLine: { en: 'Goal', ru: 'Цель' },
+  weeks: { en: 'Weekly results', ru: 'Итоги недель' },
+  weekOf: { en: 'Week of {date}', ru: 'Неделя с {date}' },
+  promoted: { en: 'Promoted', ru: 'Повышение' },
+  demoted: { en: 'Demoted', ru: 'Понижение' },
+  kept: { en: 'No change', ru: 'Без изменений' },
+  recent: { en: 'Recent XP', ru: 'Последние начисления' },
   entryGrade: {
     en: '+{xp} XP — grade {grade}',
     ru: '+{xp} XP — оценка {grade}',
@@ -152,6 +192,8 @@ export interface Format {
   tier(tier: LeagueTier): string;
   dayMonth(key: string): string;
   dayOnly(key: string): string;
+  /** Short weekday with the first letter upper-cased: `Mon`, `Пн`. */
+  weekdayShort(key: string): string;
   dayLong(key: string): string;
   dateTime(ms: number): string;
 }
@@ -164,6 +206,7 @@ export const createFormat = (locale: AppLocale): Format => {
     month: 'short',
   });
   const dayOnly = new Intl.DateTimeFormat(locale, { day: 'numeric' });
+  const weekdayShort = new Intl.DateTimeFormat(locale, { weekday: 'short' });
   const weekdayDate = new Intl.DateTimeFormat(locale, {
     weekday: 'long',
     day: 'numeric',
@@ -210,6 +253,10 @@ export const createFormat = (locale: AppLocale): Format => {
     tier: (tier: LeagueTier) => text(TIER_NAMES[tier]),
     dayMonth: (key: string) => dayMonth.format(parseDay(key)),
     dayOnly: (key: string) => dayOnly.format(parseDay(key)),
+    weekdayShort: (key: string) => {
+      const name = weekdayShort.format(parseDay(key));
+      return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1);
+    },
     dayLong: (key: string) => weekdayDate.format(parseDay(key)),
     dateTime: (ms: number) => dateTime.format(new Date(ms)),
   };
