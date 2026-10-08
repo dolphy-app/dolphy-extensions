@@ -40,7 +40,7 @@ The themes in this repository keep the theme in `src/theme.json` and register it
 
 `dolphy-ext catalog check` (and the pull request check) requires, per extension:
 
-- `extension.json` with `name`, `description` (at least 20 characters), `author` (your GitHub login) and a `version` greater than the published one; set `minAppVersion` (`0.5.0` or newer) and `tags`;
+- `extension.json` with `name`, `description` (at least 20 characters), `author` (your GitHub login) and a `version` greater than the published one; set `minAppVersion` (`0.5.0` or newer) and `tags`. `name` and `description` are a string or `{ "en": "…", "ru": "…" }` (the app shows the text in its language); the object form needs `minAppVersion` `0.7.0` or newer;
 - `README.md` that says what the extension does and what it accesses (files, processes, the network, learning data);
 - `package.json` and a lockfile (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` or `bun.lock`) inside the extension directory, even if there are no dependencies;
 - dependencies from the registry only, no `postinstall`, `prepare` or similar lifecycle scripts;

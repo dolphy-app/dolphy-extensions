@@ -1,13 +1,17 @@
 {
   "id": "theme-forest",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "apiVersion": 1,
-  "name": "Лес",
-  "description": "Спокойная светлая тема: шалфейный фон и лесной зелёный акцент",
+  "name": {
+    "en": "Forest",
+    "ru": "Лес"
+  },
+  "description": {
+    "en": "A calm light theme: a sage background with a forest green accent",
+    "ru": "Спокойная светлая тема: шалфейный фон и лесной зелёный акцент"
+  },
   "author": "Tinkerbells",
   "icon": "assets/icon.png",
-  "minAppVersion": "0.5.0",
-  "tags": [
-    "theme"
-  ]
+  "minAppVersion": "0.7.0",
+  "tags": ["theme"]
 }

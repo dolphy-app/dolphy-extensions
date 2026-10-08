@@ -5,7 +5,7 @@ A calm light theme for Dolphy: sage-green background, off-white cards and a fore
 - Contribution: the theme `theme-forest` (“Settings → Appearance”; listed there as “Лес”).
 - Icon: `assets/icon.png`, a 128×128 miniature of the app drawn from the theme's own colors (background, card, primary button, secondary accent, text lines). Regenerate it with `node scripts/theme-icon.mjs extensions/theme-forest` from the repository root.
 - Layout (app 0.5 format): `extension.json` holds the metadata (`minAppVersion` 0.5.0, tag `theme`), `src/theme.json` holds the theme and `src/index.ts` registers it from the `client` export with `addTheme`; `dolphy-ext build` produces `client.mjs`. The theme is plain data, with no server part. The extension runs with the rights of the app, but this one reads no files, uses no network and stores nothing.
-- Versions: 1.0.0 is the first release under the id `theme-forest` (the same theme was published as `dolphy.theme-forest` before; the colors are unchanged). Requires Dolphy 0.5.0 or newer.
+- Versions: 1.0.0 is the first release under the id `theme-forest` (the same theme was published as `dolphy.theme-forest` before; the colors are unchanged). Requires Dolphy 0.5.0 or newer. 1.1.0 adds English and Russian descriptions and needs Dolphy 0.7.0 or newer.
 - Palette: this is Dolphy's own palette (sage and forest green); it is not Everforest.
 - Base: a light theme (`dark: false`). Every text color is set explicitly (`on-background`, `on-surface`, `on-surface-variant`, `on-primary`, `on-secondary` and the `on-*` colors of the status colors), so contrast does not depend on the Vuetify base theme.
 

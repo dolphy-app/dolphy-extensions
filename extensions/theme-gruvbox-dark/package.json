@@ -1,6 +1,6 @@
 {
   "name": "theme-gruvbox-dark",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Тема «Gruvbox Dark» для Dolphy"
+  "description": "The \"Gruvbox Dark\" theme for Dolphy"
 }

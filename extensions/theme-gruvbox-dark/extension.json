@@ -1,13 +1,14 @@
 {
   "id": "theme-gruvbox-dark",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "apiVersion": 1,
   "name": "Gruvbox Dark",
-  "description": "Тёмная ретро-тема Gruvbox: тёплая коричнево-серая основа и оранжевый акцент",
+  "description": {
+    "en": "The dark retro Gruvbox theme: a warm brown-gray base with an orange accent",
+    "ru": "Тёмная ретро-тема Gruvbox: тёплая коричнево-серая основа и оранжевый акцент"
+  },
   "author": "Tinkerbells",
   "icon": "assets/icon.png",
-  "minAppVersion": "0.5.0",
-  "tags": [
-    "theme"
-  ]
+  "minAppVersion": "0.7.0",
+  "tags": ["theme"]
 }

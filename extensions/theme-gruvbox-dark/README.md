@@ -5,7 +5,7 @@ A dark retro theme based on the Gruvbox palette: warm brown-gray surfaces and an
 - Contribution: the theme `theme-gruvbox-dark` (“Settings → Appearance”; listed there as “Gruvbox Dark”).
 - Icon: `assets/icon.png`, a 128×128 miniature of the app drawn from the theme's colors. Regenerate it with `node scripts/theme-icon.mjs extensions/theme-gruvbox-dark` from the repository root.
 - Layout (app 0.5 format): `extension.json` holds the metadata (`minAppVersion` 0.5.0, tag `theme`), `src/theme.json` holds the theme and `src/index.ts` registers it from the `client` export with `addTheme`; `dolphy-ext build` produces `client.mjs`. The theme is plain data, with no server part. The extension runs with the rights of the app, but this one reads no files, uses no network and stores nothing.
-- Versions: 1.0.0 is the first release under the id `theme-gruvbox-dark` (the same theme was published as `dolphy.theme-gruvbox-dark` before; the colors are unchanged). Requires Dolphy 0.5.0 or newer.
+- Versions: 1.0.0 is the first release under the id `theme-gruvbox-dark` (the same theme was published as `dolphy.theme-gruvbox-dark` before; the colors are unchanged). Requires Dolphy 0.5.0 or newer. 1.1.0 adds English and Russian descriptions and needs Dolphy 0.7.0 or newer.
 - Base: a dark theme (`dark: true`). Every text color is set explicitly, so contrast does not depend on the Vuetify base theme.
 
 ## Palette source
