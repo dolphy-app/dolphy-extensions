@@ -41,12 +41,12 @@ below 4 and no give-up, the extension adds a bonus of 20% of the session XP
 
 Settings → Extensions → "XP goals" (group "XP and leagues"):
 
-| Setting              | Default | Meaning                                       |
-| -------------------- | ------- | --------------------------------------------- |
-| `xp-goals.enabled`   | on      | Off: no new XP; the earned progress is shown  |
-| `xp-goals.dailyGoal` | 30      | Daily goal in XP, 5–240                       |
-| `xp-goals.leagues`   | on      | Off: weeks are recorded, the league is frozen |
-| `xp-goals.notify`    | on      | Notification when the daily goal is reached   |
+| Setting               | Default | Meaning                                       |
+| --------------------- | ------- | --------------------------------------------- |
+| `xp-goals.enabled`    | on      | Off: no new XP; the earned progress is shown  |
+| `xp-goals.daily-goal` | 30      | Daily goal in XP, 5–240                       |
+| `xp-goals.leagues`    | on      | Off: weeks are recorded, the league is frozen |
+| `xp-goals.notify`     | on      | Notification when the daily goal is reached   |
 
 ## Data and permissions
 
@@ -57,6 +57,26 @@ Settings → Extensions → "XP goals" (group "XP and leagues"):
   closed weeks, the league, the last 20 XP entries and the open session.
 - **Sends:** nothing over the network; it only shows a system notification.
 
+## What you see
+
+- **Panel "XP goals"** (sidebar): a ring with today's XP against the daily goal
+  (a check mark and the words "Daily goal reached" once it is met), the league
+  card (league and its number, the week's XP against the XP needed for
+  promotion, "N XP more to be promoted", a warning when the league is at risk
+  of demotion in the last two days of the week, days left in the week), the
+  streak and total XP, the last 14 days as bars (days that met the goal are
+  marked), up to 8 completed weeks with promotion / demotion / no change, and
+  the last XP entries ("+3 XP — grade 5", "+4 XP — perfect session bonus").
+- **Card in "Today's plan"**: a small ring, the league and the streak; the
+  button opens the panel. The card is hidden while the extension is switched
+  off.
+- With no XP yet the panel asks you to finish a practice session. With leagues
+  switched off it says so instead of the league progress. With the extension
+  off it shows what was earned and a button to the settings. If the status
+  cannot be loaded, an error with "Refresh" is shown.
+- Text follows the language of the app (English or Russian), colors follow the
+  light and dark theme.
+
 ## Limitations
 
 - The server part counts XP only while the app runs and delivers events;
@@ -65,6 +85,12 @@ Settings → Extensions → "XP goals" (group "XP and leagues"):
   your own weekly XP against fixed thresholds.
 - Weeks are closed at most 8 per call, so a very long break is processed over
   several calls; with a break that long the league falls week by week.
+- XP is an estimate of effort: the minutes are read from the pauses between
+  attempts, not measured. Turning the extension off does not remove earned XP,
+  and the state is not rewritten when the study progress is reset.
+- The panel and the card reload when the window becomes visible and when the
+  engine reports progress; a session's perfect-session bonus appears on the
+  next reload (press "Refresh").
 
 ## Structure
 
@@ -74,7 +100,11 @@ Settings → Extensions → "XP goals" (group "XP and leagues"):
   segment).
 - `src/shared/` — `types.ts` and `rpc.ts` (zod schema of the status) shared with
   the client.
-- `src/client.ts` — the user interface.
+- `src/client.ts` — registers the panel and the plan card.
+- `src/StatsPanel.vue`, `src/DayBars.vue`, `src/PlanCard.vue` — the user
+  interface (Vuetify components, theme tokens only); `src/useGamification.ts`
+  loads and refreshes the status; `src/i18n.ts` holds every visible string in
+  English and Russian.
 
 ```sh
 npm test

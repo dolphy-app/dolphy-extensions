@@ -63,7 +63,7 @@ describe(`${ID}: server`, () => {
   });
 
   it('notifies once a day when the goal is reached', async () => {
-    const running = await start({ settingValues: { [`${ID}.dailyGoal`]: 5 } });
+    const running = await start({ settingValues: { [`${ID}.daily-goal`]: 5 } });
     for (let i = 1; i <= 4; i += 1) {
       await running.events.emit('attempt.closed', closed(NOW + i * 6 * MIN));
     }
@@ -73,7 +73,7 @@ describe(`${ID}: server`, () => {
   });
 
   it('survives a refused notification and respects the notify setting', async () => {
-    const running = await start({ settingValues: { [`${ID}.dailyGoal`]: 5 } });
+    const running = await start({ settingValues: { [`${ID}.daily-goal`]: 5 } });
     const show = vi
       .spyOn(running.notifications, 'show')
       .mockRejectedValue(new Error('no'));
@@ -84,7 +84,7 @@ describe(`${ID}: server`, () => {
     expect((await running.rpc(statusRpc, {})).totalXp).toBe(5);
 
     const quiet = await start({
-      settingValues: { [`${ID}.dailyGoal`]: 5, [`${ID}.notify`]: false },
+      settingValues: { [`${ID}.daily-goal`]: 5, [`${ID}.notify`]: false },
     });
     for (let i = 1; i <= 5; i += 1) {
       await quiet.events.emit('attempt.closed', closed(NOW + i * 6 * MIN));
@@ -105,14 +105,14 @@ describe(`${ID}: server`, () => {
   it('follows a changed daily goal in status', async () => {
     const running = await start();
     await running.events.emit('attempt.closed', closed(NOW + MIN));
-    await running.settings.set(`${ID}.dailyGoal`, 60);
+    await running.settings.set(`${ID}.daily-goal`, 60);
     const status = await running.rpc(statusRpc, {});
     expect(status.today.goal).toBe(60);
     expect(status.week.promoteAt).toBe(300);
   });
 
   it('closes a past week on status and promotes the league', async () => {
-    const running = await start({ settingValues: { [`${ID}.dailyGoal`]: 5 } });
+    const running = await start({ settingValues: { [`${ID}.daily-goal`]: 5 } });
     const lastWeek = new Date(2026, 9, 1, 12).getTime(); // Thursday
     await running.events.emit('session.started', {
       sessionId: 's',

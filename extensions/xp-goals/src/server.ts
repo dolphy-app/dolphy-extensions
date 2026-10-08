@@ -32,7 +32,7 @@ export const server = defineServer((s) => {
       order: 1,
     },
     {
-      id: `${ID}.dailyGoal`,
+      id: `${ID}.daily-goal`,
       type: 'number',
       label: { en: 'Daily goal (XP)', ru: 'Дневная цель (XP)' },
       description: {
@@ -72,7 +72,7 @@ export const server = defineServer((s) => {
   ]);
 
   const settings = (): Settings => ({
-    dailyGoal: Number(s.settings.get(`${ID}.dailyGoal`)),
+    dailyGoal: Number(s.settings.get(`${ID}.daily-goal`)),
     leagues: Boolean(s.settings.get(`${ID}.leagues`)),
     notify: Boolean(s.settings.get(`${ID}.notify`)),
     enabled: Boolean(s.settings.get(`${ID}.enabled`)),
