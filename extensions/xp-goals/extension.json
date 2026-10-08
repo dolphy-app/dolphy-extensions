@@ -6,6 +6,7 @@
   "name": "XP goals",
   "description": "Earn XP for every solved exercise and reach a daily goal.",
   "author": "Tinkerbells",
+  "icon": "assets/icon.png",
   "minAppVersion": "0.6.0",
   "tags": ["learning", "productivity"]
 }
