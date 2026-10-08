@@ -8,6 +8,8 @@ export const client = defineClient((c) => {
     id: 'xp-goals.main',
     title: { en: 'XP goals', ru: 'XP и цели' },
     icon: 'trophy',
+    // the panel draws its own page header (`<h1>`, date, refresh)
+    header: false,
     component: StatsPanel,
   });
 

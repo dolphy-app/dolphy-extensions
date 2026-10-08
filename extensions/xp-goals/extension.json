@@ -6,6 +6,6 @@
   "name": "XP goals",
   "description": "Earn XP for every solved exercise, reach a daily goal and climb weekly leagues.",
   "author": "Tinkerbells",
-  "minAppVersion": "0.5.0",
+  "minAppVersion": "0.6.0",
   "tags": ["learning", "productivity"]
 }

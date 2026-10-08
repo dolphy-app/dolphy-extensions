@@ -56,19 +56,22 @@ const toPlan = async () => {
   <section class="xp" data-testid="xp-panel">
     <div class="xp__inner">
       <header class="xp__header">
-        <p v-if="status !== null" class="xp__date">
-          {{ f.dayLong(status.today.date) }}
-        </p>
-        <v-btn
-          class="xp__refresh"
-          variant="tonal"
-          prepend-icon="mdi-refresh"
-          :aria-busy="loading"
-          data-testid="xp-refresh"
-          @click="load"
-        >
-          {{ f.t('refresh') }}
-        </v-btn>
+        <h1 class="xp__title" data-testid="xp-title">{{ f.t('title') }}</h1>
+        <div class="xp__meta">
+          <p v-if="status !== null" class="xp__date">
+            {{ f.dayLong(status.today.date) }}
+          </p>
+          <v-btn
+            class="xp__refresh"
+            variant="tonal"
+            prepend-icon="mdi-refresh"
+            :aria-busy="loading"
+            data-testid="xp-refresh"
+            @click="load"
+          >
+            {{ f.t('refresh') }}
+          </v-btn>
+        </div>
       </header>
 
       <div class="xp__loadbar">
@@ -296,14 +299,29 @@ const toPlan = async () => {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 8px 32px 48px;
+  padding: 24px 32px 48px;
 }
 
 .xp__header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.xp__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 2rem;
+}
+
+.xp__meta {
+  display: flex;
+  align-items: center;
   gap: 16px;
+  margin-left: auto;
 }
 
 .xp__date {
@@ -314,10 +332,6 @@ const toPlan = async () => {
 
 .xp__date::first-letter {
   text-transform: uppercase;
-}
-
-.xp__refresh {
-  margin-left: auto;
 }
 
 /* out of the flow: the bar appearing must not move the page */
@@ -521,7 +535,7 @@ const toPlan = async () => {
   }
 
   .xp__inner {
-    padding: 8px 16px 32px;
+    padding: 16px 16px 32px;
   }
 
   .xp__row--main {

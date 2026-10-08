@@ -189,6 +189,7 @@ describe(`${ID}: client entry`, () => {
       {
         id: `${ID}.main`,
         title: { en: 'XP goals', ru: 'XP и цели' },
+        header: false,
         component: StatsPanel,
       },
     ]);
@@ -203,6 +204,24 @@ describe(`${ID}: client entry`, () => {
 });
 
 describe(`${ID}: panel`, () => {
+  it('draws its own page header: the h1 title, then the date and the refresh button', async () => {
+    const en = mount(StatsPanel, () => status());
+    await vi.waitFor(() => expect(has(en.host, 'xp-today')).toBe(true));
+    const titles = en.host.querySelectorAll('h1');
+    expect(titles).toHaveLength(1);
+    expect(titles[0]?.textContent).toBe('XP goals');
+    const header = en.host.querySelector('header');
+    expect(header?.firstElementChild).toBe(titles[0]);
+    expect(header?.querySelector('.xp__date')?.textContent?.trim()).not.toBe(
+      '',
+    );
+    expect(header?.querySelector('[data-testid="xp-refresh"]')).not.toBeNull();
+
+    const ru = mount(StatsPanel, () => status(), 'ru');
+    await vi.waitFor(() => expect(has(ru.host, 'xp-today')).toBe(true));
+    expect(ru.host.querySelector('h1')?.textContent).toBe('XP и цели');
+  });
+
   it('shows the ring, the league, the streak, the total and the recent entries', async () => {
     const { host } = mount(StatsPanel, () => status());
     await vi.waitFor(() => expect(has(host, 'xp-today')).toBe(true));
